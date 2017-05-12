@@ -12,13 +12,13 @@ public class LineReader {
     private List<String> lines = new ArrayList<>();
     private String allLines = "";
 
-    public synchronized void load(String fileName) throws IOException {
+    public synchronized void load(String inputFilePath) throws IOException {
 
         lines = new ArrayList<>();
         
         StringBuilder builder = new StringBuilder();
         
-        try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(inputFilePath))) {
 
             String line = br.readLine();
 

@@ -6,7 +6,6 @@ import java.util.List;
 public class GcodeTranslator {
 
     private final LineReader lineReader;
-    private final double speed = 100;
     
     private String result = "Not translated";
 
@@ -44,7 +43,7 @@ public class GcodeTranslator {
                     
                     if(point1 != null) {
                         point2 = new Point(line);
-                        items.add(new IntermediateItem(point1, point2, speed));
+                        items.add(new IntermediateItem(point1, point2, RunningParameters.getSpeed()));
                         point1 = point2; 
                     } else {
                         point1 = new Point(line);
@@ -54,6 +53,7 @@ public class GcodeTranslator {
                     
                 case GFXY_LINE:
                     items.add(new TerminalItem());
+                    point1 = null;
                     break;
                 default:    //Do nothing for the rest.
                 }

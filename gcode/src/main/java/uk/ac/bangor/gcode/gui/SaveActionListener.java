@@ -7,12 +7,14 @@ import java.io.PrintWriter;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import uk.ac.bangor.gcode.GcodeTranslator;
+import uk.ac.bangor.gcode.OutputFileWriter;
 
 public class SaveActionListener implements ActionListener {
 
     private final GcodeTranslator translator;
     private final JFileChooser jFileChooser;
     private final JButton fileChooseButton;
+    private final OutputFileWriter writer = new OutputFileWriter();
 
     public SaveActionListener(JFileChooser jFileChooser, JButton fileChooseButton, GcodeTranslator translator) {
 
@@ -27,12 +29,7 @@ public class SaveActionListener implements ActionListener {
         if (jFileChooser.showOpenDialog(fileChooseButton) == JFileChooser.APPROVE_OPTION) {
             String saveToName = jFileChooser.getSelectedFile().getAbsolutePath();
             
-            try (PrintWriter writer = new PrintWriter(saveToName, "UTF-8")) {
-                writer.println(translator.getResult());
-                writer.flush();
-            } catch (IOException ex) {
-                //TODO
-            }
+            writer.write(saveToName, translator.getResult());
         }
     }
 }

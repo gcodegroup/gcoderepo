@@ -6,7 +6,7 @@ public final class StartItem implements GcodeItem {
     @Override
     public String getString() {
         return  "CT0 3 7 0\n" + 
-                "DEL 300\n" + 
+                "DEL " + RunningParameters.getStartDelayTime() + "\n" + 
                 "CTO 3 7 1";
     }
 
