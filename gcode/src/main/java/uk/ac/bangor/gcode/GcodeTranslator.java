@@ -57,13 +57,18 @@ public class GcodeTranslator {
             builder.append(item.getString()).append("\n");
         });
         
-        result = new String(builder);
+        result = new String(builder).trim();
     }
 
     private LineStatus getLineStatus(String line) {
 
         if(line == null ) {
             return LineStatus.UNUSED_LINE;
+        }
+        
+        if(line.trim().isEmpty())
+        {
+            return LineStatus.EMPTY;
         }
         
         if(line.startsWith(";")) {

@@ -6,7 +6,7 @@ public class TerminalItem implements GcodeItem {
     @Override
     public String getString() {
         return "CTO 1 7 0\n" +
-               "DEL 300\n" +
+               "DEL " + RunningParameters.getStartDelayTime() + "\n" + 
                "CTO 1 7 1";
     }    
     

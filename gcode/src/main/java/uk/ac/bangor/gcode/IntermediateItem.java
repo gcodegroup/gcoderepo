@@ -28,7 +28,7 @@ public class IntermediateItem implements GcodeItem {
                 "DEL " + getDelayTime();
     }    
     
-    public String getDelayTime() {
+    private String getDelayTime() {
         
         double xDistance = point2.getX() - point1.getX();
         double yDistance = point2.getY() - point1.getY();        
@@ -48,7 +48,7 @@ public class IntermediateItem implements GcodeItem {
     }
     
     
-    public String getVy() {
+    private String getVy() {
         
         double xDistance = point2.getX() - point1.getX();
         double yDistance = point2.getY() - point1.getY();           
