@@ -4,14 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GcodeTranslator {
-
-    private final LineReader lineReader;
     
     private String result = "Not translated";
-
-    public GcodeTranslator(LineReader lineReader) {
-        this.lineReader = lineReader;
-    }
 
     public synchronized String getResult() {
         return result;
@@ -21,10 +15,8 @@ public class GcodeTranslator {
         result = "Not translated";
     }
     
-    public synchronized void translate() {
+    public synchronized void translate(List<String> lines) {
 
-        List<String> lines = lineReader.getLines();
-        
         List<GcodeItem> items = new ArrayList<>();
         
         Point point1 = null;

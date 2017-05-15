@@ -8,7 +8,7 @@ import uk.ac.bangor.gcode.LineReader;
 public class GcodeController {
     
     private final LineReader lineReader = new LineReader();
-    private final GcodeTranslator gcodeTranslator = new GcodeTranslator(lineReader);
+    private final GcodeTranslator gcodeTranslator = new GcodeTranslator();
     private BrowseAcitonListener browseAcitonListener;
     private TranslateActionListener translateActionListener;
     private SaveActionListener saveActionListener;
@@ -25,7 +25,7 @@ public class GcodeController {
         browseAcitonListener = new BrowseAcitonListener(frame, lineReader, gcodeTranslator);
         frame.getFileChooseButton().addActionListener(browseAcitonListener);
         
-        translateActionListener = new TranslateActionListener(frame.getOutputArea(), gcodeTranslator);
+        translateActionListener = new TranslateActionListener(frame.getOutputArea(), lineReader, gcodeTranslator);
         frame.getTranslateButton().addActionListener(translateActionListener);
         
         saveActionListener = new SaveActionListener(frame.getFc(), frame.getFileChooseButton(), gcodeTranslator);
