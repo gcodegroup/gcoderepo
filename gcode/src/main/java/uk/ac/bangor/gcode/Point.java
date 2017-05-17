@@ -5,9 +5,9 @@ public final class Point {
     private final double xValue;
     private final double yValue;
     
-    public Point(String line) {
+    public Point(FileLine line) {
         
-        String[] cells = line.split(" ");
+        String[] cells = line.getLineString().split(" ");
         
         String xString = null;
         String yString = null;

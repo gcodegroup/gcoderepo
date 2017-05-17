@@ -1,11 +1,11 @@
-package uk.ac.bangor.gcode.newgui.listener;
+package uk.ac.bangor.gcode.gui.listener;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
-import uk.ac.bangor.gcode.newgui.GcodeModel;
+import uk.ac.bangor.gcode.gui.GcodeModel;
 
 /**
  *

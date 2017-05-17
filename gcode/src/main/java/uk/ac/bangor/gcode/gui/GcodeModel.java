@@ -1,26 +1,30 @@
-package uk.ac.bangor.gcode.newgui;
+package uk.ac.bangor.gcode.gui;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
-import java.util.List;
+import uk.ac.bangor.gcode.GcodeFile;
+import uk.ac.bangor.gcode.RunningParameters;
 
 public class GcodeModel {
 
     public static final String INPUT_FILE_PATH_PROPERTY = "INPUT_FILE_PATH_PROPERTY";
     public static final String OUTPUT_FILE_PATH_PROPERTY = "OUTPUT_FILE_PATH_PROPERTY";
-    public static final String ORIGINAL_TEXT_PROPERTY = "ORIGINAL_TEXT_PROPERTY";
+    public static final String GCODE_FILE_PROPERTY = "GCODE_FILE_PROPERTY";
     public static final String TRANSLATED_TEXT_PROPERTY = "TRANSLATED_TEXT_PROPERTY";
     public static final String SPEED_PROPERTY = "SPEED_PROPERTY";
     public static final String START_DELAY_TIME_PROPERTY = "START_DELAY_TIME_PROPERTY";
+    public static final String RESULT_SAVED_PROPERTY = "RESULT_SAVED_PROPERTY";
 
     private String inputFilePath;
     private String outputFilePath;
-    private String originalText;
     private String translatedText;
-    private List<String> lines;
+    private GcodeFile gcodeFile;
     private int speed;
     private int startDelayTime;
+    private InputFilePathStatus inputFilePathStatus = InputFilePathStatus.OK;
+    private boolean resultSaved;
+    private MainStatus mainStatus = MainStatus.NO_INPUT_FILE;
 
     private final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
@@ -29,8 +33,10 @@ public class GcodeModel {
     }
 
     public synchronized void setInputFilePath(String inputFilePath) {
+        
         String oldValue = this.inputFilePath;
         this.inputFilePath = inputFilePath;
+        inputFilePathStatus = new File(inputFilePath).isFile() ? InputFilePathStatus.OK : InputFilePathStatus.INVALID_INPUT_FILE_PATH;
         propertyChangeSupport.firePropertyChange(INPUT_FILE_PATH_PROPERTY, oldValue, inputFilePath);
     }
 
@@ -44,16 +50,6 @@ public class GcodeModel {
         propertyChangeSupport.firePropertyChange(OUTPUT_FILE_PATH_PROPERTY, oldValue, outputFilePath);
     }
 
-    public synchronized String getOriginalText() {
-        return originalText;
-    }
-
-    public synchronized void setOriginalText(String originalText) {
-        String oldValue = this.originalText;
-        this.originalText = originalText;
-        propertyChangeSupport.firePropertyChange(ORIGINAL_TEXT_PROPERTY, oldValue, originalText);
-    }
-
     public synchronized String getTranslatedText() {
         return translatedText;
     }
@@ -61,23 +57,19 @@ public class GcodeModel {
     public synchronized void setTranslatedText(String translatedText) {
         String oldValue = this.translatedText;
         this.translatedText = translatedText;
+        mainStatus = createMainMessageStatus();
         propertyChangeSupport.firePropertyChange(TRANSLATED_TEXT_PROPERTY, oldValue, translatedText);
     }
 
-    public synchronized boolean isValidInputFilePath() {
-        return new File(inputFilePath).isFile();
+    public GcodeFile getGcodeFile() {
+        return gcodeFile;
     }
 
-    public synchronized boolean isValidTranslatedText() {
-        return translatedText != null && !translatedText.trim().isEmpty();
-    }
+    public void setGcodeFile(GcodeFile gcodeFile) {
 
-    public synchronized List<String> getLines() {
-        return lines;
-    }
-
-    public synchronized void setLines(List<String> lines) {
-        this.lines = lines;
+        GcodeFile oldValue = this.gcodeFile;
+        this.gcodeFile = gcodeFile;
+        propertyChangeSupport.firePropertyChange(GCODE_FILE_PROPERTY, oldValue, gcodeFile);
     }
 
     public synchronized int getSpeed() {
@@ -85,10 +77,11 @@ public class GcodeModel {
     }
 
     public synchronized void setSpeed(int speed) {
-        
+
         int oldValue = this.speed;
         this.speed = speed;
-        propertyChangeSupport.firePropertyChange(SPEED_PROPERTY, oldValue, speed);        
+        RunningParameters.getInstance().setSpeed(speed);
+        propertyChangeSupport.firePropertyChange(SPEED_PROPERTY, oldValue, speed);
     }
 
     public synchronized int getStartDelayTime() {
@@ -96,10 +89,59 @@ public class GcodeModel {
     }
 
     public synchronized void setStartDelayTime(int startDelayTime) {
-        
+
         int oldValue = this.startDelayTime;
         this.startDelayTime = startDelayTime;
-         propertyChangeSupport.firePropertyChange(START_DELAY_TIME_PROPERTY, oldValue, startDelayTime);       
+        RunningParameters.getInstance().setStartDelayTime(startDelayTime);
+        propertyChangeSupport.firePropertyChange(START_DELAY_TIME_PROPERTY, oldValue, startDelayTime);
+    }
+
+    public synchronized boolean isResultSaved() {
+        return resultSaved;
+    }
+
+    public synchronized void setResultSaved(boolean resultSaved) {
+        
+        boolean oldValue = this.resultSaved;
+        this.resultSaved = resultSaved;
+        mainStatus = createMainMessageStatus();
+        propertyChangeSupport.firePropertyChange(RESULT_SAVED_PROPERTY, oldValue, resultSaved);        
+    }
+
+
+    public synchronized InputFilePathStatus getInputFilePathStatus() {
+        return inputFilePathStatus;
+    }
+
+    public synchronized MainStatus getMainStatus() {
+        return mainStatus;
+    }
+
+    private MainStatus createMainMessageStatus() {
+
+        if(gcodeFile == null || gcodeFile.getFileString() == null || gcodeFile.getFileString().isEmpty()) {
+            return MainStatus.NO_INPUT_FILE;
+        }
+        
+        if(outputFilePath == null || new File(outputFilePath).isDirectory()) {
+            return MainStatus.INVALID_OUTPUT_FILE_PATH;
+
+        }
+        
+        if( new File(outputFilePath).isFile()) {
+            return MainStatus.OUTPUT_FILE_EXISTS;
+
+        }
+        
+        return resultSaved ? MainStatus.RESULT_SAVED : MainStatus.RESULT_NOT_SAVED;
+    }
+    
+    public synchronized boolean isValidOriginalText() {
+        return gcodeFile != null && gcodeFile.getFileString() != null && !gcodeFile.getFileString().trim().isEmpty();
+    }
+
+    public synchronized boolean isValidTranslatedText() {
+        return translatedText != null && !translatedText.trim().isEmpty();
     }
 
     public synchronized void addPropertyChangeListener(PropertyChangeListener listener) {

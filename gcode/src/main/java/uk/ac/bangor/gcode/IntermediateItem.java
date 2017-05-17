@@ -65,8 +65,7 @@ public class IntermediateItem implements GcodeItem {
     public int hashCode() {
         int hash = 5;
         hash = 29 * hash + (this.point1 != null ? this.point1.hashCode() : 0);
-        hash = 29 * hash + (this.point2 != null ? this.point2.hashCode() : 0);
-        return hash;
+        return 29 * hash + (this.point2 != null ? this.point2.hashCode() : 0);
     }
 
     @Override

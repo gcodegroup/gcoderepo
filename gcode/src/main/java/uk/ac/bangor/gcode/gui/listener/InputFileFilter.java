@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package uk.ac.bangor.gcode.newgui.listener;
+package uk.ac.bangor.gcode.gui.listener;
 
 import java.io.File;
 import javax.swing.filechooser.FileFilter;
@@ -27,6 +27,5 @@ public class InputFileFilter extends FileFilter {
     @Override
     public String getDescription() {
         return "Only directories and gcode files will be displayed.";
-    }
-    
+    }    
 }

@@ -1,15 +1,53 @@
-package uk.ac.bangor.gcode.newgui;
+package uk.ac.bangor.gcode.gui;
+
+import java.awt.Component;
+import java.io.File;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.JSpinner;
+import uk.ac.bangor.gcode.GcodeTranslator;
+import uk.ac.bangor.gcode.OutputFileWriter;
+import uk.ac.bangor.gcode.gui.listener.InputFileDocumentListener;
+import uk.ac.bangor.gcode.gui.listener.InputFileFilter;
+import uk.ac.bangor.gcode.gui.listener.InputFilePathPropertyChangeListener;
+import uk.ac.bangor.gcode.gui.listener.InputFilePropertyChangeListener;
+import uk.ac.bangor.gcode.gui.listener.NumericPropertyChangeListener;
+import uk.ac.bangor.gcode.gui.listener.OutputDocumentListener;
+import uk.ac.bangor.gcode.gui.listener.OutputFileFilter;
+import uk.ac.bangor.gcode.gui.listener.OutputFilePathPropertyChangeListener;
+import uk.ac.bangor.gcode.gui.listener.TranslationPropertyChangeListener;
 
 public class GcodeJFrame extends javax.swing.JFrame {
-    
+
     private static final long serialVersionUID = 4194304381471993483L;
 
+    private final GcodeTranslator gcodeTranslator = new GcodeTranslator();
+    private final OutputFileWriter writer = new OutputFileWriter();
     private final GcodeModel model = new GcodeModel();
+
     /**
      * Creates new form GcodeJFrame
      */
     public GcodeJFrame() {
+
         initComponents();
+        inputJFileChooser = new JFileChooser(new File(model.getInputFilePath()));
+        inputJFileChooser.setDialogTitle("Select Input File");
+        inputJFileChooser.setFileFilter(new InputFileFilter());
+
+        outputJFileChooser = new JFileChooser(new File(model.getOutputFilePath()));
+        outputJFileChooser.setDialogTitle("Select Output File");
+        outputJFileChooser.setFileFilter(new OutputFileFilter());
+
+        inputFileJTextField.getDocument().addDocumentListener(new InputFileDocumentListener(model));
+        outputFileJTextField.getDocument().addDocumentListener(new OutputDocumentListener(model));
+
+        model.addPropertyChangeListener(GcodeModel.INPUT_FILE_PATH_PROPERTY, new InputFilePathPropertyChangeListener(inputFileErrorJLabel));
+        model.addPropertyChangeListener(GcodeModel.GCODE_FILE_PROPERTY, new InputFilePropertyChangeListener(inputJTextArea, translateJButton));
+        model.addPropertyChangeListener(GcodeModel.TRANSLATED_TEXT_PROPERTY, new TranslationPropertyChangeListener(outputJTextArea, saveOutputJButton));
+        model.addPropertyChangeListener(GcodeModel.START_DELAY_TIME_PROPERTY, new NumericPropertyChangeListener(gcodeTranslator));
+        model.addPropertyChangeListener(GcodeModel.SPEED_PROPERTY, new NumericPropertyChangeListener(gcodeTranslator));
+        model.addPropertyChangeListener(GcodeModel.OUTPUT_FILE_PATH_PROPERTY, new OutputFilePathPropertyChangeListener(outputErrorWarningMessageJLabel, saveOutputJButton));
     }
 
     /**
@@ -31,7 +69,7 @@ public class GcodeJFrame extends javax.swing.JFrame {
         inputFileJTextField = new javax.swing.JTextField();
         inputFileJButton = new javax.swing.JButton();
         saveOutputJButton = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
+        outputErrorWarningMessageJLabel = new javax.swing.JLabel();
         outputFileJLabel = new javax.swing.JLabel();
         outputFileJTextField = new javax.swing.JTextField();
         selectOutputFileJButton = new javax.swing.JButton();
@@ -39,6 +77,11 @@ public class GcodeJFrame extends javax.swing.JFrame {
         initialDelayTimeJSpinner = new javax.swing.JSpinner();
         speedJLabel = new javax.swing.JLabel();
         speedJSpinner = new javax.swing.JSpinner();
+        inputFileErrorJLabel = new javax.swing.JLabel();
+        mainJMenuBar = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        exitJMenuItem = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -52,22 +95,59 @@ public class GcodeJFrame extends javax.swing.JFrame {
         outputJScrollPane.setViewportView(outputJTextArea);
 
         translateJButton.setText("Translate");
+        translateJButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                translateJButtonActionPerformed(evt);
+            }
+        });
 
         inputFileJLabel.setText("Input File:");
 
         inputFileJButton.setText("Select File");
+        inputFileJButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inputFileJButtonActionPerformed(evt);
+            }
+        });
 
         saveOutputJButton.setText("Save Output");
+        saveOutputJButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveOutputJButtonActionPerformed(evt);
+            }
+        });
 
-        jLabel2.setText("jLabel2");
+        outputErrorWarningMessageJLabel.setForeground(model.getMainStatus().getColor());
+        outputErrorWarningMessageJLabel.setText(model.getMainStatus().getMessage());
 
         outputFileJLabel.setText("Output File:");
 
         selectOutputFileJButton.setText("Select File");
+        selectOutputFileJButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selectOutputFileJButtonActionPerformed(evt);
+            }
+        });
 
         initialDelayTimeJLabel.setText("Initial Delay Time:");
 
+        initialDelayTimeJSpinner.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                initialDelayTimeJSpinnerStateChanged(evt);
+            }
+        });
+
         speedJLabel.setText("Spped:");
+
+        speedJSpinner.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                speedJSpinnerStateChanged(evt);
+            }
+        });
+
+        inputFileErrorJLabel.setForeground(model.getInputFilePathStatus().getColor());
+        inputFileErrorJLabel.setText(model.getInputFilePathStatus().getMessage());
+        inputFileErrorJLabel.setFocusable(false);
 
         javax.swing.GroupLayout gcodeTranslateJPanelLayout = new javax.swing.GroupLayout(gcodeTranslateJPanel);
         gcodeTranslateJPanel.setLayout(gcodeTranslateJPanelLayout);
@@ -76,6 +156,7 @@ public class GcodeJFrame extends javax.swing.JFrame {
             .addGroup(gcodeTranslateJPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(gcodeTranslateJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(inputFileErrorJLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, gcodeTranslateJPanelLayout.createSequentialGroup()
                         .addComponent(inputFileJLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -95,8 +176,8 @@ public class GcodeJFrame extends javax.swing.JFrame {
                                 .addComponent(outputFileJTextField)
                                 .addGap(4, 4, 4)))
                         .addComponent(selectOutputFileJButton))
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, gcodeTranslateJPanelLayout.createSequentialGroup()
+                    .addComponent(outputErrorWarningMessageJLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(gcodeTranslateJPanelLayout.createSequentialGroup()
                         .addComponent(initialDelayTimeJLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(initialDelayTimeJSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -117,8 +198,10 @@ public class GcodeJFrame extends javax.swing.JFrame {
                     .addComponent(inputFileJLabel)
                     .addComponent(inputFileJTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(inputFileJButton))
+                .addGap(5, 5, 5)
+                .addComponent(inputFileErrorJLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(inputJScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(inputJScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(gcodeTranslateJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(initialDelayTimeJSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -127,7 +210,7 @@ public class GcodeJFrame extends javax.swing.JFrame {
                     .addComponent(translateJButton)
                     .addComponent(initialDelayTimeJLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(outputJScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
+                .addComponent(outputJScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(gcodeTranslateJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(selectOutputFileJButton)
@@ -138,9 +221,26 @@ public class GcodeJFrame extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(saveOutputJButton)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(outputErrorWarningMessageJLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(32, 32, 32))
         );
+
+        jMenu1.setText("File");
+
+        exitJMenuItem.setText("Exit");
+        exitJMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exitJMenuItemActionPerformed(evt);
+            }
+        });
+        jMenu1.add(exitJMenuItem);
+
+        mainJMenuBar.add(jMenu1);
+
+        jMenu2.setText("Edit");
+        mainJMenuBar.add(jMenu2);
+
+        setJMenuBar(mainJMenuBar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -160,16 +260,75 @@ public class GcodeJFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void inputFileJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputFileJButtonActionPerformed
+
+        if (inputJFileChooser.showOpenDialog((Component) evt.getSource()) == JFileChooser.APPROVE_OPTION) {
+            model.setInputFilePath(inputJFileChooser.getSelectedFile().getAbsolutePath());
+        }
+    }//GEN-LAST:event_inputFileJButtonActionPerformed
+
+    private void selectOutputFileJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectOutputFileJButtonActionPerformed
+        if (outputJFileChooser.showOpenDialog((Component) evt.getSource()) == JFileChooser.APPROVE_OPTION) {
+            model.setOutputFilePath(outputJFileChooser.getSelectedFile().getAbsolutePath());
+        }
+    }//GEN-LAST:event_selectOutputFileJButtonActionPerformed
+
+    private void initialDelayTimeJSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_initialDelayTimeJSpinnerStateChanged
+        JSpinner jSpinner = (JSpinner) evt.getSource();
+        model.setSpeed((int) jSpinner.getValue());
+    }//GEN-LAST:event_initialDelayTimeJSpinnerStateChanged
+
+    private void speedJSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_speedJSpinnerStateChanged
+        JSpinner jSpinner = (JSpinner) evt.getSource();
+        model.setStartDelayTime((int) jSpinner.getValue());
+    }//GEN-LAST:event_speedJSpinnerStateChanged
+
+    private void translateJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_translateJButtonActionPerformed
+        model.setTranslatedText(gcodeTranslator.translate(model.getGcodeFile().getFileLines()));        // TODO add your handling code here:
+    }//GEN-LAST:event_translateJButtonActionPerformed
+
+    private void saveOutputJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveOutputJButtonActionPerformed
+        writer.write(model.getOutputFilePath(), model.getTranslatedText());
+    }//GEN-LAST:event_saveOutputJButtonActionPerformed
+
+    private void exitJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitJMenuItemActionPerformed
+
+        String dialogTitle = "Exit";
+        
+        if (model.isResultSaved()) {
+            int result = JOptionPane.showConfirmDialog(saveOutputJButton, "Are you sure?", dialogTitle, JOptionPane.OK_CANCEL_OPTION);
+            if (result == JOptionPane.OK_OPTION) {
+                System.exit(0);
+            }
+        }
+
+        int result = JOptionPane.showConfirmDialog(saveOutputJButton, "Result has not been saved. Do you want to save it?", dialogTitle, JOptionPane.YES_NO_CANCEL_OPTION);
+        switch (result) {
+            case JOptionPane.YES_OPTION:
+                writer.write(model.getOutputFilePath(), model.getTranslatedText());
+                System.exit(0);
+                break;
+            case JOptionPane.NO_OPTION:
+                System.exit(0);
+                break;
+        }
+    }//GEN-LAST:event_exitJMenuItemActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem exitJMenuItem;
     private javax.swing.JPanel gcodeTranslateJPanel;
     private javax.swing.JLabel initialDelayTimeJLabel;
     private javax.swing.JSpinner initialDelayTimeJSpinner;
+    private javax.swing.JLabel inputFileErrorJLabel;
     private javax.swing.JButton inputFileJButton;
     private javax.swing.JLabel inputFileJLabel;
     private javax.swing.JTextField inputFileJTextField;
     private javax.swing.JScrollPane inputJScrollPane;
     private javax.swing.JTextArea inputJTextArea;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuBar mainJMenuBar;
+    private javax.swing.JLabel outputErrorWarningMessageJLabel;
     private javax.swing.JLabel outputFileJLabel;
     private javax.swing.JTextField outputFileJTextField;
     private javax.swing.JScrollPane outputJScrollPane;
@@ -180,4 +339,6 @@ public class GcodeJFrame extends javax.swing.JFrame {
     private javax.swing.JSpinner speedJSpinner;
     private javax.swing.JButton translateJButton;
     // End of variables declaration//GEN-END:variables
+    private final JFileChooser inputJFileChooser;
+    private final JFileChooser outputJFileChooser;
 }
