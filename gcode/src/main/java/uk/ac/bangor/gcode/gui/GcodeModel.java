@@ -80,7 +80,7 @@ public class GcodeModel {
 
         int oldValue = this.speed;
         this.speed = speed;
-        RunningParameters.getInstance().setSpeed(speed);
+        RunningParameters.getInstance().setMovingSpeed(speed);
         propertyChangeSupport.firePropertyChange(SPEED_PROPERTY, oldValue, speed);
     }
 
@@ -92,7 +92,7 @@ public class GcodeModel {
 
         int oldValue = this.startDelayTime;
         this.startDelayTime = startDelayTime;
-        RunningParameters.getInstance().setStartDelayTime(startDelayTime);
+        RunningParameters.getInstance().setInitialDelayTime(startDelayTime);
         propertyChangeSupport.firePropertyChange(START_DELAY_TIME_PROPERTY, oldValue, startDelayTime);
     }
 

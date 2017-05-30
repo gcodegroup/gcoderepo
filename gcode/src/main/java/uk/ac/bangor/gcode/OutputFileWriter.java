@@ -14,7 +14,7 @@ public class OutputFileWriter {
             writer.println(result);
             writer.flush();
         } catch (IOException ex) {
-            //TODO
+            throw new GcodeException(ex);
         }
     }
 }

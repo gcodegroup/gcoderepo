@@ -4,50 +4,61 @@ import java.util.Objects;
 
 /**
  * The FileLine class holds the information about a line in the gcode file.
- * 
+ *
  * @author zc
  */
 public final class FileLine {
 
     private final String lineString;
-    private final LineStatus lineStatus;
+    private final LineType lineStatus;
 
     public FileLine(String lineString) {
+
         this.lineString = lineString;
 
         if (lineString == null) {
-            lineStatus = LineStatus.UNUSED_LINE;
+            lineStatus = LineType.UNUSED_LINE;
             return;
         }
 
-        if (lineString.startsWith(";")) {
-            lineStatus = LineStatus.COMMENT;
+        if (lineString.trim().startsWith(";")) {
+            lineStatus = LineType.COMMENT;
             return;
         }
 
         if (lineString.contains("G") && !lineString.contains("F") && lineString.contains("X") && lineString.contains("Y") && lineString.contains("E")) {
-            lineStatus = LineStatus.GXYE_LINE;
+            lineStatus = LineType.GXYE_LINE;
             return;
         }
 
         if (lineString.contains("G") && lineString.contains("F") && lineString.contains("X") && lineString.contains("Y") && lineString.contains("E")) {
-            lineStatus = LineStatus.GFXYE_LINE;
+            lineStatus = LineType.GFXYE_LINE;
             return;
         }
 
         if (lineString.contains("G") && lineString.contains("F") && lineString.contains("X") && lineString.contains("Y") && !lineString.contains("E")) {
-            lineStatus = LineStatus.GFXY_LINE;
+            lineStatus = LineType.GFXY_LINE;
             return;
         }
 
-        lineStatus = LineStatus.UNUSED_LINE;
+        lineStatus = LineType.UNUSED_LINE;
     }
 
+    /**
+     * Get the string content of the line.
+     *
+     * @return line string.
+     */
     public String getLineString() {
         return lineString;
     }
 
-    public LineStatus getLineStatus() {
+    /**
+     * Get the line status. This method will not return null. A line with the null string content is treated as an unused line. 
+     *
+     * @return the LineType object.
+     */
+    public LineType getLineStatus() {
         return lineStatus;
     }
 
@@ -58,16 +69,17 @@ public final class FileLine {
 
     @Override
     public boolean equals(Object obj) {
-        
+
         if (obj == null) {
             return false;
         }
-        
+
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final FileLine other = (FileLine) obj;
         
+        final FileLine other = (FileLine) obj;
+
         return Objects.equals(this.lineString, other.lineString);
     }
 }
