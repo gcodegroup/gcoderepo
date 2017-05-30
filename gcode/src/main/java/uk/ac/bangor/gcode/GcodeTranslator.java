@@ -68,7 +68,7 @@ public final class GcodeTranslator {
         items.stream().forEach((item) -> {
             builder.append(item.getString()).append("\n");
         });
-
+        
         return new String(builder).trim();
     }
 }

@@ -3,10 +3,6 @@ package uk.ac.bangor.gcode;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-/**
- *
- * @author zc
- */
 public class OutputFileWriter {
 
     public void write(String outPutFilePath, String result) {
