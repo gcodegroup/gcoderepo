@@ -6,7 +6,8 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 /**
- * The CommandLineRunner class contains the main method which run the application via the command-line command.
+ * The CommandLineRunner class contains the main method which run the
+ * application via the command-line command.
  *
  * @author zc
  */
@@ -18,10 +19,19 @@ public final class CommandLineRunner {
         GcodeRepositoryManager gcodeRepositoryManager = GcodeRepositoryManager.getInstance();
         Logger logger = gcodeRepositoryManager.getLogger(CommandLineRunner.class);
 
+        logger.info("Start Gcode Translator......");
+
         try {
+
             RunningParameters runningParameters = RunningParameters.getInstance();
 
-            if (args != null) {
+            if (args == null || args.length == 0) {
+                
+                logger.debug("Reading saved parameters.......");
+                gcodeRepositoryManager.readRunningParameters();
+            } else {
+                
+                runningParameters.setUseDefaultConfig(false);
 
                 String inputFileKey = "--input.file.path=";
                 String outputFileKey = "--output.file.path=";
@@ -71,6 +81,9 @@ public final class CommandLineRunner {
             logger.info("Start to write the result onto disk......");
             writer.write(outputFilePath, result);
             logger.info("The result has been successfully written to: " + outputFilePath);
+            logger.debug("Start to save the parameters......");
+            gcodeRepositoryManager.writeRunningParameters();
+            logger.debug("The parameters have been saved.");
             logger.info("The Gcode Translator has successfully operated.");
 
         } catch (Throwable th) {

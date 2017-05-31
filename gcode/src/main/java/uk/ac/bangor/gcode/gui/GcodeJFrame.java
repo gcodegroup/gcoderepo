@@ -2,9 +2,12 @@ package uk.ac.bangor.gcode.gui;
 
 import java.awt.Component;
 import java.io.File;
+import java.io.IOException;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
+import uk.ac.bangor.gcode.GcodeException;
+import uk.ac.bangor.gcode.GcodeRepositoryManager;
 import uk.ac.bangor.gcode.GcodeTranslator;
 import uk.ac.bangor.gcode.OutputFileWriter;
 import uk.ac.bangor.gcode.gui.listener.InputFileDocumentListener;
@@ -80,6 +83,7 @@ public class GcodeJFrame extends javax.swing.JFrame {
         inputFileErrorJLabel = new javax.swing.JLabel();
         mainJMenuBar = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
+        saveParametersJMenuItem = new javax.swing.JMenuItem();
         exitJMenuItem = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
 
@@ -227,6 +231,14 @@ public class GcodeJFrame extends javax.swing.JFrame {
 
         jMenu1.setText("File");
 
+        saveParametersJMenuItem.setText("Save Parameters");
+        saveParametersJMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveParametersJMenuItemActionPerformed(evt);
+            }
+        });
+        jMenu1.add(saveParametersJMenuItem);
+
         exitJMenuItem.setText("Exit");
         exitJMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -275,12 +287,12 @@ public class GcodeJFrame extends javax.swing.JFrame {
 
     private void initialDelayTimeJSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_initialDelayTimeJSpinnerStateChanged
         JSpinner jSpinner = (JSpinner) evt.getSource();
-        model.setSpeed((int) jSpinner.getValue());
+        model.setMovingSpeed((int) jSpinner.getValue());
     }//GEN-LAST:event_initialDelayTimeJSpinnerStateChanged
 
     private void speedJSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_speedJSpinnerStateChanged
         JSpinner jSpinner = (JSpinner) evt.getSource();
-        model.setStartDelayTime((int) jSpinner.getValue());
+        model.setInitialDelayTime((int) jSpinner.getValue());
     }//GEN-LAST:event_speedJSpinnerStateChanged
 
     private void translateJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_translateJButtonActionPerformed
@@ -314,6 +326,14 @@ public class GcodeJFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_exitJMenuItemActionPerformed
 
+    private void saveParametersJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveParametersJMenuItemActionPerformed
+        try {
+            GcodeRepositoryManager.getInstance().writeRunningParameters();
+        } catch (IOException ex) {
+            throw new GcodeException(ex);
+        }
+    }//GEN-LAST:event_saveParametersJMenuItemActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem exitJMenuItem;
     private javax.swing.JPanel gcodeTranslateJPanel;
@@ -334,6 +354,7 @@ public class GcodeJFrame extends javax.swing.JFrame {
     private javax.swing.JScrollPane outputJScrollPane;
     private javax.swing.JTextArea outputJTextArea;
     private javax.swing.JButton saveOutputJButton;
+    private javax.swing.JMenuItem saveParametersJMenuItem;
     private javax.swing.JButton selectOutputFileJButton;
     private javax.swing.JLabel speedJLabel;
     private javax.swing.JSpinner speedJSpinner;

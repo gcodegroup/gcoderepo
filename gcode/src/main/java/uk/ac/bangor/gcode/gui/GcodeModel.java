@@ -16,12 +16,10 @@ public class GcodeModel {
     public static final String START_DELAY_TIME_PROPERTY = "START_DELAY_TIME_PROPERTY";
     public static final String RESULT_SAVED_PROPERTY = "RESULT_SAVED_PROPERTY";
 
-    private String inputFilePath;
-    private String outputFilePath;
+    private final RunningParameters runningParameters = RunningParameters.getInstance();
+    
     private String translatedText;
     private GcodeFile gcodeFile;
-    private int speed;
-    private int startDelayTime;
     private InputFilePathStatus inputFilePathStatus = InputFilePathStatus.OK;
     private boolean resultSaved;
     private MainStatus mainStatus = MainStatus.NO_INPUT_FILE;
@@ -29,24 +27,25 @@ public class GcodeModel {
     private final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
     public synchronized String getInputFilePath() {
-        return inputFilePath;
+        return runningParameters.getInputFilePath();
     }
 
     public synchronized void setInputFilePath(String inputFilePath) {
         
-        String oldValue = this.inputFilePath;
-        this.inputFilePath = inputFilePath;
+        String oldValue = runningParameters.getInputFilePath();
         inputFilePathStatus = new File(inputFilePath).isFile() ? InputFilePathStatus.OK : InputFilePathStatus.INVALID_INPUT_FILE_PATH;
+        runningParameters.setInputFilePath(inputFilePath);
         propertyChangeSupport.firePropertyChange(INPUT_FILE_PATH_PROPERTY, oldValue, inputFilePath);
     }
 
     public synchronized String getOutputFilePath() {
-        return outputFilePath;
+        return runningParameters.getOutputFilePath();
     }
 
     public synchronized void setOutputFilePath(String outputFilePath) {
-        String oldValue = this.outputFilePath;
-        this.outputFilePath = outputFilePath;
+        
+        String oldValue = runningParameters.getOutputFilePath();
+        runningParameters.setOutputFilePath(outputFilePath);
         propertyChangeSupport.firePropertyChange(OUTPUT_FILE_PATH_PROPERTY, oldValue, outputFilePath);
     }
 
@@ -72,28 +71,26 @@ public class GcodeModel {
         propertyChangeSupport.firePropertyChange(GCODE_FILE_PROPERTY, oldValue, gcodeFile);
     }
 
-    public synchronized int getSpeed() {
-        return speed;
+    public synchronized int getMovingSpeed() {
+        return runningParameters.getMovingSpeed();
     }
 
-    public synchronized void setSpeed(int speed) {
+    public synchronized void setMovingSpeed(int movingSpeed) {
 
-        int oldValue = this.speed;
-        this.speed = speed;
-        RunningParameters.getInstance().setMovingSpeed(speed);
-        propertyChangeSupport.firePropertyChange(SPEED_PROPERTY, oldValue, speed);
+        int oldValue = runningParameters.getMovingSpeed();
+        runningParameters.setMovingSpeed(movingSpeed);
+        propertyChangeSupport.firePropertyChange(SPEED_PROPERTY, oldValue, movingSpeed);
     }
 
-    public synchronized int getStartDelayTime() {
-        return startDelayTime;
+    public synchronized int getInitialDelayTime() {
+        return runningParameters.getInitialDelayTime();
     }
 
-    public synchronized void setStartDelayTime(int startDelayTime) {
+    public synchronized void setInitialDelayTime(int initialDelayTime) {
 
-        int oldValue = this.startDelayTime;
-        this.startDelayTime = startDelayTime;
-        RunningParameters.getInstance().setInitialDelayTime(startDelayTime);
-        propertyChangeSupport.firePropertyChange(START_DELAY_TIME_PROPERTY, oldValue, startDelayTime);
+        int oldValue = runningParameters.getInitialDelayTime();
+        runningParameters.setInitialDelayTime(initialDelayTime);
+        propertyChangeSupport.firePropertyChange(START_DELAY_TIME_PROPERTY, oldValue, initialDelayTime);
     }
 
     public synchronized boolean isResultSaved() {
@@ -123,6 +120,7 @@ public class GcodeModel {
             return MainStatus.NO_INPUT_FILE;
         }
         
+        String outputFilePath = getOutputFilePath();
         if(outputFilePath == null || new File(outputFilePath).isDirectory()) {
             return MainStatus.INVALID_OUTPUT_FILE_PATH;
 
