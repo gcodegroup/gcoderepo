@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <actions>
-        <action>
-            <actionName>CUSTOM-jgitflow:release-start</actionName>
-            <displayName>jgitflow:release-start</displayName>
-            <goals>
-                <goal>jgitflow:release-start</goal>
-            </goals>
-            <activatedProfiles>
-                <activatedProfile>gitRelease</activatedProfile>
-            </activatedProfiles>
-        </action>
-    </actions>
+    <action>
+        <actionName>CUSTOM-jgitflow:release-start</actionName>
+        <displayName>jgitflow:release-start</displayName>
+        <goals>
+            <goal>-B jgitflow:release-start</goal>
+        </goals>
+        <activatedProfiles>
+            <activatedProfile>gitRelease</activatedProfile>
+        </activatedProfiles>
+    </action>
+</actions>
