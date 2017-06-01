@@ -1,0 +1,31 @@
+--------------Example------------------------------
+Reference Nu. 000001
+
+Title: example
+
+Status: New             [New, In Progress, Fixed, Invalid, Reopened]
+
+Summary: 
+1) Start GUI
+2) Click Select File Button.
+3) The application crashed.
+
+Level: Fatal                [Fatal, Major, Normal, Minor]
+
+Log:
+java.net.ConnectException: Connection timed out: connect
+	at java.net.DualStackPlainSocketImpl.connect0(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:339)
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:200)
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:182)
+	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+
+
+Comments:
+
+1) Can not be reproduced.
+
+2) To be closed. 
+-------------------------------------------------------

@@ -1,10 +1,9 @@
 package uk.ac.bangor.gcode.gui.listener;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
+import uk.ac.bangor.gcode.GcodeException;
 import uk.ac.bangor.gcode.gui.GcodeModel;
 
 /**
@@ -39,9 +38,9 @@ public class OutputDocumentListener implements DocumentListener {
     
     private void update(DocumentEvent e) {
         try {
-            model.setOutputFilePath(e.getDocument().getText(0, e.getLength()));
+            model.setOutputFilePath(e.getDocument().getText(0, e.getLength() - 1));
         } catch (BadLocationException ex) {
-            Logger.getLogger(InputFileDocumentListener.class.getName()).log(Level.SEVERE, null, ex);
+                        throw new GcodeException(ex);
         }
     }
 }

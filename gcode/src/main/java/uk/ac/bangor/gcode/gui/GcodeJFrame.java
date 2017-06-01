@@ -280,13 +280,13 @@ public class GcodeJFrame extends javax.swing.JFrame {
     private void inputFileJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputFileJButtonActionPerformed
 
         if (inputJFileChooser.showOpenDialog((Component) evt.getSource()) == JFileChooser.APPROVE_OPTION) {
-            model.setInputFilePath(inputJFileChooser.getSelectedFile().getAbsolutePath());
+            inputFileJTextField.setText(inputJFileChooser.getSelectedFile().getAbsolutePath());
         }
     }//GEN-LAST:event_inputFileJButtonActionPerformed
 
     private void selectOutputFileJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectOutputFileJButtonActionPerformed
         if (outputJFileChooser.showOpenDialog((Component) evt.getSource()) == JFileChooser.APPROVE_OPTION) {
-            model.setOutputFilePath(outputJFileChooser.getSelectedFile().getAbsolutePath());
+            outputFileJTextField.setText(outputJFileChooser.getSelectedFile().getAbsolutePath());
         }
     }//GEN-LAST:event_selectOutputFileJButtonActionPerformed
 
@@ -337,8 +337,6 @@ public class GcodeJFrame extends javax.swing.JFrame {
             RunningParameters runningParameters = RunningParameters.getInstance();            
             runningParameters.setInputFilePath(model.getInputFilePath());
             runningParameters.setOutputFilePath(model.getOutputFilePath());
-            runningParameters.setInitialDelayTime(model.getInitialDelayTime());
-            runningParameters.setMovingSpeed(model.getMovingSpeed());
             
             GcodeRepositoryManager.getInstance().writeRunningParameters();
         } catch (IOException ex) {

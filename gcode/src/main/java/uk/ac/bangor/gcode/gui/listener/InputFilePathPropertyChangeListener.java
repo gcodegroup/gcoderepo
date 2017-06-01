@@ -3,8 +3,6 @@ package uk.ac.bangor.gcode.gui.listener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JLabel;
 import uk.ac.bangor.gcode.GcodeException;
 import uk.ac.bangor.gcode.LineReader;
