@@ -26,8 +26,8 @@ public final class IntermediateItem extends AbstractGcodeItem {
         String vx = getString(speed * xDistance / Math.sqrt(xDistance * xDistance + yDistance * yDistance));
         String vy = getString(speed * yDistance / Math.sqrt(xDistance * xDistance + yDistance * yDistance));
 
-        return "MOV A " + x + " B " + y + "\n"
-             + "VEL A " + vx + " B " + vy + "\n"
+        return "VEL A " + vx + " B " + vy + "\n"
+             + "MOV A " + x + " B " + y + "\n"
              + "DEL " + delayTime;
 
     }

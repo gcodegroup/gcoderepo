@@ -12,6 +12,10 @@ public enum LineType {
      */
     COMMENT, 
     
+    G0_XYZ,
+    
+    G0_XY,
+    
     GFE_LINE, 
     
     
