@@ -18,34 +18,39 @@ public class GcodeModel {
 
     private final RunningParameters runningParameters = RunningParameters.getInstance();
     
+    private String inputFilePath;
+    private String outputFilePath;
     private String translatedText;
     private GcodeFile gcodeFile;
-    private InputFilePathStatus inputFilePathStatus = InputFilePathStatus.OK;
+    private int movingSpeed = runningParameters.getMovingSpeed();
+    private int initialDelayTime = runningParameters.getInitialDelayTime();
+    private InputFilePathStatus inputFilePathStatus = InputFilePathStatus.EMPTY_PATH;
     private boolean resultSaved;
-    private MainStatus mainStatus = MainStatus.NO_INPUT_FILE;
+    private MainStatus mainStatus = MainStatus.INPUT_FILE_NOT_TRANSLATED;
 
     private final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
     public synchronized String getInputFilePath() {
-        return runningParameters.getInputFilePath();
+        return inputFilePath;
     }
 
     public synchronized void setInputFilePath(String inputFilePath) {
         
-        String oldValue = runningParameters.getInputFilePath();
-        inputFilePathStatus = new File(inputFilePath).isFile() ? InputFilePathStatus.OK : InputFilePathStatus.INVALID_INPUT_FILE_PATH;
-        runningParameters.setInputFilePath(inputFilePath);
+        String oldValue = this.inputFilePath;
+        this.inputFilePath = inputFilePath;
+        inputFilePathStatus = (inputFilePath == null || inputFilePath.trim().isEmpty()) ? 
+                InputFilePathStatus.EMPTY_PATH : (new File(inputFilePath).isFile() ? InputFilePathStatus.OK : InputFilePathStatus.INVALID_INPUT_FILE_PATH);
         propertyChangeSupport.firePropertyChange(INPUT_FILE_PATH_PROPERTY, oldValue, inputFilePath);
     }
 
     public synchronized String getOutputFilePath() {
-        return runningParameters.getOutputFilePath();
+        return outputFilePath;
     }
 
     public synchronized void setOutputFilePath(String outputFilePath) {
-        
-        String oldValue = runningParameters.getOutputFilePath();
-        runningParameters.setOutputFilePath(outputFilePath);
+        String oldValue = this.outputFilePath;
+        this.outputFilePath = outputFilePath;
+        mainStatus = createMainMessageStatus();        
         propertyChangeSupport.firePropertyChange(OUTPUT_FILE_PATH_PROPERTY, oldValue, outputFilePath);
     }
 
@@ -72,23 +77,25 @@ public class GcodeModel {
     }
 
     public synchronized int getMovingSpeed() {
-        return runningParameters.getMovingSpeed();
+        return movingSpeed;
     }
 
     public synchronized void setMovingSpeed(int movingSpeed) {
 
-        int oldValue = runningParameters.getMovingSpeed();
-        runningParameters.setMovingSpeed(movingSpeed);
+        int oldValue = this.movingSpeed;
+        this.movingSpeed = movingSpeed;
+        RunningParameters.getInstance().setMovingSpeed(movingSpeed);
         propertyChangeSupport.firePropertyChange(SPEED_PROPERTY, oldValue, movingSpeed);
     }
 
     public synchronized int getInitialDelayTime() {
-        return runningParameters.getInitialDelayTime();
+        return initialDelayTime;
     }
 
     public synchronized void setInitialDelayTime(int initialDelayTime) {
 
-        int oldValue = runningParameters.getInitialDelayTime();
+        int oldValue = this.initialDelayTime;
+        this.initialDelayTime = initialDelayTime;
         runningParameters.setInitialDelayTime(initialDelayTime);
         propertyChangeSupport.firePropertyChange(START_DELAY_TIME_PROPERTY, oldValue, initialDelayTime);
     }
@@ -114,13 +121,22 @@ public class GcodeModel {
         return mainStatus;
     }
 
+    public synchronized String getDefaultInputFilePath() {
+        
+        return runningParameters.getInputFilePath();
+    }
+    
+    public synchronized String getDefaultOutputFilePath() {
+        
+        return runningParameters.getOutputFilePath();
+    }
+    
     private MainStatus createMainMessageStatus() {
 
         if(gcodeFile == null || gcodeFile.getFileString() == null || gcodeFile.getFileString().isEmpty()) {
-            return MainStatus.NO_INPUT_FILE;
+            return MainStatus.INPUT_FILE_NOT_TRANSLATED;
         }
         
-        String outputFilePath = getOutputFilePath();
         if(outputFilePath == null || new File(outputFilePath).isDirectory()) {
             return MainStatus.INVALID_OUTPUT_FILE_PATH;
 
@@ -141,7 +157,12 @@ public class GcodeModel {
     public synchronized boolean isValidTranslatedText() {
         return translatedText != null && !translatedText.trim().isEmpty();
     }
-
+    
+    public synchronized boolean isParametersOkToBeSaved() {
+        
+        return inputFilePathStatus.canBeProcessed() && mainStatus.canBeProcessed();
+    }
+    
     public synchronized void addPropertyChangeListener(PropertyChangeListener listener) {
         propertyChangeSupport.addPropertyChangeListener(listener);
     }

@@ -84,7 +84,7 @@ public final class CommandLineRunner {
             logger.debug("Start to save the parameters......");
             gcodeRepositoryManager.writeRunningParameters();
             logger.debug("The parameters have been saved.");
-            logger.info("The Gcode Translator has successfully operated.");
+            logger.info("The Gcode Translator has been successfully operated.");
 
         } catch (Throwable th) {
             logger.error("Failed to run Gcode Translator", th);

@@ -5,7 +5,9 @@ import java.awt.Color;
 public enum InputFilePathStatus {
 
     
-    OK("OK", false, null, true),
+    EMPTY_PATH("", false, Color.WHITE, false),
+    OK("OK", false, Color.WHITE, true), 
+    POSSIBLE_WRONG_TYPE("The file may be invalid", true, Color.ORANGE, true),
     INVALID_INPUT_FILE_PATH("Invalid input file path", true, Color.RED, false);
     
     private final String message;

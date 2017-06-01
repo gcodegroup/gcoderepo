@@ -1,5 +1,9 @@
-1. Use within the NetBeans software.
-
+1. Use NetBeans to run the Gcode application.
+    1.05 Right click the Gcode project node and select "Git/Remote/Pull...".
+    1.10 Right click the Gcode project node and select "Clean and Build".
+    1.20 Open the uk.ac.bangor.gcode package and open the RunningParameters.java class.
+    1.30 Change the default parameters.
+    1.40 right click the CommandLineRunner.java class and select "Run".
 
 2. Install the Gcode Translator on a Windows Computer.
 
