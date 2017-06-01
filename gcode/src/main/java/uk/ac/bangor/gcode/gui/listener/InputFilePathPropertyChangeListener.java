@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JLabel;
+import uk.ac.bangor.gcode.GcodeException;
 import uk.ac.bangor.gcode.LineReader;
 import uk.ac.bangor.gcode.gui.GcodeModel;
 import uk.ac.bangor.gcode.gui.InputFilePathStatus;
@@ -30,8 +31,10 @@ public class InputFilePathPropertyChangeListener implements PropertyChangeListen
             try {
                 model.setGcodeFile(lineReader.load(model.getInputFilePath()));
             } catch (IOException ex) {
-                Logger.getLogger(InputFilePathPropertyChangeListener.class.getName()).log(Level.SEVERE, null, ex);
+                throw new GcodeException(ex);
             }
         } 
+        
+        model.setTranslatedText(null);
     }
 }

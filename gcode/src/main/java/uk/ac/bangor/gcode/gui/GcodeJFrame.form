@@ -4,7 +4,7 @@
   <NonVisualComponents>
     <Menu class="javax.swing.JMenuBar" name="mainJMenuBar">
       <SubComponents>
-        <Menu class="javax.swing.JMenu" name="jMenu1">
+        <Menu class="javax.swing.JMenu" name="fileJMenu">
           <Properties>
             <Property name="text" type="java.lang.String" value="File"/>
           </Properties>
@@ -12,6 +12,9 @@
             <MenuItem class="javax.swing.JMenuItem" name="saveParametersJMenuItem">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Save Parameters"/>
+                <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="model.isParametersOkToBeSaved()" type="code"/>
+                </Property>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="saveParametersJMenuItemActionPerformed"/>
@@ -27,7 +30,7 @@
             </MenuItem>
           </SubComponents>
         </Menu>
-        <Menu class="javax.swing.JMenu" name="jMenu2">
+        <Menu class="javax.swing.JMenu" name="editJMenu">
           <Properties>
             <Property name="text" type="java.lang.String" value="Edit"/>
           </Properties>
@@ -82,32 +85,23 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" attributes="0">
+                          <Component id="outputFileJLabel" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Component id="outputFileJTextField" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="selectOutputFileJButton" min="-2" pref="96" max="-2" attributes="0"/>
+                      </Group>
                       <Component id="inputFileErrorJLabel" max="32767" attributes="0"/>
                       <Group type="102" alignment="1" attributes="0">
                           <Component id="inputFileJLabel" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="inputFileJTextField" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="inputFileJButton" min="-2" pref="83" max="-2" attributes="0"/>
+                          <Component id="inputFileJButton" min="-2" pref="106" max="-2" attributes="0"/>
                       </Group>
                       <Component id="inputJScrollPane" alignment="0" max="32767" attributes="0"/>
                       <Component id="outputJScrollPane" alignment="0" max="32767" attributes="0"/>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <Component id="saveOutputJButton" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace pref="265" max="32767" attributes="0"/>
-                              </Group>
-                              <Group type="102" attributes="0">
-                                  <Component id="outputFileJLabel" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  <Component id="outputFileJTextField" max="32767" attributes="0"/>
-                                  <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
-                              </Group>
-                          </Group>
-                          <Component id="selectOutputFileJButton" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <Component id="outputErrorWarningMessageJLabel" max="32767" attributes="0"/>
                       <Group type="102" attributes="0">
                           <Component id="initialDelayTimeJLabel" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
@@ -118,7 +112,12 @@
                           <Component id="speedJSpinner" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="translateJButton" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="136" max="32767" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="saveOutputJButton" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="outputErrorWarningMessageJLabel" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -147,22 +146,19 @@
                       <Component id="initialDelayTimeJLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Component id="outputJScrollPane" pref="185" max="32767" attributes="0"/>
+                  <Component id="outputJScrollPane" pref="176" max="32767" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="selectOutputFileJButton" min="-2" max="-2" attributes="0"/>
-                      <Group type="102" attributes="0">
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="outputFileJLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="outputFileJTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="saveOutputJButton" min="-2" max="-2" attributes="0"/>
-                      </Group>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="outputFileJLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="outputFileJTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="selectOutputFileJButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="outputErrorWarningMessageJLabel" min="-2" pref="22" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="saveOutputJButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="outputErrorWarningMessageJLabel" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace min="-2" pref="60" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -238,6 +234,7 @@
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="model.getMainStatus().getMessage()" type="code"/>
             </Property>
+            <Property name="focusable" type="boolean" value="false"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="outputFileJLabel">
