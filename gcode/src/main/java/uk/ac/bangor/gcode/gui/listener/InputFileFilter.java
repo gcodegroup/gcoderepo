@@ -21,6 +21,6 @@ public class InputFileFilter extends FileFilter {
     
     @Override
     public String getDescription() {
-        return "Only directories and gcode files will be displayed.";
+        return "Show only folders and gcode files";
     }    
 }

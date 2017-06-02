@@ -11,15 +11,14 @@ import uk.ac.bangor.gcode.gui.GcodeModel;
  * @author zc
  */
 public class InputFileDocumentListener implements DocumentListener {
-    
+
     private final GcodeModel model;
 
     public InputFileDocumentListener(GcodeModel model) {
-        
+
         this.model = model;
     }
 
-    
     @Override
     public void insertUpdate(DocumentEvent e) {
         update(e);
@@ -34,11 +33,11 @@ public class InputFileDocumentListener implements DocumentListener {
     public void changedUpdate(DocumentEvent e) {
         update(e);
     }
-    
-    
+
     private void update(DocumentEvent e) {
         try {
-            model.setInputFilePath(e.getDocument().getText(0, e.getLength() - 1));
+            int length = e.getLength();
+            model.setInputFilePath(length <= 0 ? "" : e.getDocument().getText(0, length));
         } catch (BadLocationException ex) {
             throw new GcodeException(ex);
         }

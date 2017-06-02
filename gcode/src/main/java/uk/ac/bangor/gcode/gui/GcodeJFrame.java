@@ -106,6 +106,7 @@ public class GcodeJFrame extends javax.swing.JFrame {
         outputJScrollPane.setViewportView(outputJTextArea);
 
         translateJButton.setText("Translate");
+        translateJButton.setEnabled(model.isValidOriginalText());
         translateJButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 translateJButtonActionPerformed(evt);
@@ -122,6 +123,7 @@ public class GcodeJFrame extends javax.swing.JFrame {
         });
 
         saveOutputJButton.setText("Save Output");
+        saveOutputJButton.setEnabled(model.isValidTranslatedText());
         saveOutputJButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 saveOutputJButtonActionPerformed(evt);
@@ -143,13 +145,14 @@ public class GcodeJFrame extends javax.swing.JFrame {
 
         initialDelayTimeJLabel.setText("Initial Delay Time:");
 
+        initialDelayTimeJSpinner.setValue(model.getInitialDelayTime());
         initialDelayTimeJSpinner.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 initialDelayTimeJSpinnerStateChanged(evt);
             }
         });
 
-        speedJLabel.setText("Spped:");
+        speedJLabel.setText("Speed:");
 
         speedJSpinner.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -186,14 +189,14 @@ public class GcodeJFrame extends javax.swing.JFrame {
                     .addGroup(gcodeTranslateJPanelLayout.createSequentialGroup()
                         .addComponent(initialDelayTimeJLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(initialDelayTimeJSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addComponent(initialDelayTimeJSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(speedJLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(speedJSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(speedJSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(translateJButton)
-                        .addGap(0, 136, Short.MAX_VALUE))
+                        .addComponent(translateJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 72, Short.MAX_VALUE))
                     .addGroup(gcodeTranslateJPanelLayout.createSequentialGroup()
                         .addComponent(saveOutputJButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -292,12 +295,12 @@ public class GcodeJFrame extends javax.swing.JFrame {
 
     private void initialDelayTimeJSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_initialDelayTimeJSpinnerStateChanged
         JSpinner jSpinner = (JSpinner) evt.getSource();
-        model.setMovingSpeed((int) jSpinner.getValue());
+        model.setInitialDelayTime((int) jSpinner.getValue());
     }//GEN-LAST:event_initialDelayTimeJSpinnerStateChanged
 
     private void speedJSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_speedJSpinnerStateChanged
         JSpinner jSpinner = (JSpinner) evt.getSource();
-        model.setInitialDelayTime((int) jSpinner.getValue());
+        model.setMovingSpeed((int) jSpinner.getValue());
     }//GEN-LAST:event_speedJSpinnerStateChanged
 
     private void translateJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_translateJButtonActionPerformed

@@ -39,7 +39,9 @@ public class GcodeModel {
         String oldValue = this.inputFilePath;
         this.inputFilePath = inputFilePath;
         inputFilePathStatus = (inputFilePath == null || inputFilePath.trim().isEmpty()) ? 
-                InputFilePathStatus.EMPTY_PATH : (new File(inputFilePath).isFile() ? InputFilePathStatus.OK : InputFilePathStatus.INVALID_INPUT_FILE_PATH);
+                InputFilePathStatus.EMPTY_PATH : (new File(inputFilePath).isFile() ? 
+                (inputFilePath.toLowerCase().endsWith(".gcode") ? InputFilePathStatus.OK : InputFilePathStatus.POSSIBLE_WRONG_TYPE) 
+               : InputFilePathStatus.INVALID_INPUT_FILE_PATH);
         propertyChangeSupport.firePropertyChange(INPUT_FILE_PATH_PROPERTY, oldValue, inputFilePath);
     }
 

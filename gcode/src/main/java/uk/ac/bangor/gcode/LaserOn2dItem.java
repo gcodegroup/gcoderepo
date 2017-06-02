@@ -26,9 +26,9 @@ public final class LaserOn2dItem extends AbstractGcodeItem {
         String vx = getString(speed * xDistance / Math.sqrt(xDistance * xDistance + yDistance * yDistance));
         String vy = getString(speed * yDistance / Math.sqrt(xDistance * xDistance + yDistance * yDistance));
 
-        return "VEL A " + vx + " B " + vy + "\n"
-             + "MOV A " + x + " B " + y + "\n"
-             + "DEL " + delayTime;
+        return "VEL A " + vx + " B " + vy + "\n" +
+               "MOV A " + x + " B " + y + "\n" +
+               "DEL " + delayTime;
 
     }
 
