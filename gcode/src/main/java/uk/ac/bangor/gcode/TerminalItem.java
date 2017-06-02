@@ -4,7 +4,7 @@ public final class TerminalItem extends AbstractGcodeItem {
 
     public TerminalItem() {
         super( "CTO 1 7 0\n" +
-               "DEL 300\n" +
+               "DEL " + RunningParameters.getInstance().getInitialDelayTime() + "\n" +
                "CTO 1 7 1");
     }
 }

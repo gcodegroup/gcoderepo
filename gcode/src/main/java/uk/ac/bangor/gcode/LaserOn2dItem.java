@@ -4,13 +4,13 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 /**
- * The IntermediateItem class represents a movement from one point to another.
+ * The LaserOn2dItem class represents a movement from one point to another.
  *
  * @author zc
  */
-public final class IntermediateItem extends AbstractGcodeItem {
+public final class LaserOn2dItem extends AbstractGcodeItem {
 
-    public IntermediateItem(Point point1, Point point2, double speed) {
+    public LaserOn2dItem(Point point1, Point point2, double speed) {
 
         super(getString(point1, point2, speed));
     }

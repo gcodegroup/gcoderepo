@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.log4j.Logger;
 
 /**
  * The LineReader class reads all lines from an input file.
@@ -22,6 +23,8 @@ public class LineReader {
      */
     public GcodeFile load(String inputFilePath) throws IOException {
 
+        Logger logger = GcodeRepositoryManager.getInstance().getLogger(getClass());
+        
         List<FileLine> lines = new ArrayList<>();
 
         StringBuilder builder = new StringBuilder();
@@ -31,7 +34,16 @@ public class LineReader {
             String line = br.readLine();
 
             while (line != null) {
-                lines.add(new FileLine(line));
+                
+                FileLine fileLine = new FileLine(line);
+                String validLine = fileLine.getLineString();
+                if(validLine != null && !validLine.trim().isEmpty()) {
+                    lines.add(fileLine);
+            //        logger.debug("Added to process: " + line);
+                } else {
+                    logger.debug("Dropped line:     " + line);
+                }
+
                 builder.append(line).append("\n");
                 line = br.readLine();
             }

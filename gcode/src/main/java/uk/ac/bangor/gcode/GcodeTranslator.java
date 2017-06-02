@@ -29,46 +29,87 @@ public final class GcodeTranslator {
 
             switch (line.getLineStatus()) {
 
-                case GFXYE_LINE:
-                    items.add(new StartItem());
-                    point1 = new Point(line);
-                    break;
-                case GXYE_LINE:
-
-                    if (point1 != null) {
-                        point2 = new Point(line);
-                        if (!point2.equals(point1)) {
-                            items.add(new IntermediateItem(point1, point2, speed));
-                            point1 = point2;
-                        }
-                    } else {
-                        point1 = new Point(line);
-                    }
-
+                case G0_FXYZ_LINE:
+                    point1 = new Point(line, false);
+                    items.add(new LaserOff3DItem(point1));
                     break;
 
-                case GFXY_LINE:
-
-                    if (point1 != null) {
-                        point2 = new Point(line);
-                        if (!point2.equals(point1)) {
-                            items.add(new IntermediateItem(point1, point2, speed));
-                        }
+                case G1_EFXY_LINE:
+                    
+                    if (point1 == null) {
+                        throw new GcodeException("Invalid point1.\n" + line.getLineString());
                     }
 
-                    items.add(new TerminalItem());
-                    point1 = null;
+                    if(!point1.isLaserOn()) {
+                        items.add(new StartItem());
+                    }
+                    
+                    point2 = new Point(line, true);
+                    items.add(new LaserOn2dItem(point1, point2, speed));
+                    point1 = point2;
+                    break;
+                case G1_EXY_LINE:
+
+                    if (point1 == null) {
+                        break;
+                    }
+
+                    point2 = new Point(line, true);
+                    if (!point2.equals(point1)) {
+                        items.add(new LaserOn2dItem(point1, point2, speed));
+                    }
+                    point1 = point2;
+                    break;
+
+                case G0_XY_LINE:
+
+                    if (point1 == null) {
+                        throw new GcodeException("Invalid point1..\n" + line.getLineString());
+                    }
+                    
+                    point2 = new Point(line, false);
+                    items.add(new LaserOff2DItem(point2));
+                    point1 = point2;
+                    break;
+                    
+                case G0_FXY_LINE:
+
+                    if (point1 == null) {
+                        throw new GcodeException("Invalid point1..\n" + line.getLineString());
+                    }
+
+                    point2 = new Point(line, false);
+                    items.add(new LaserOff2DItem(point2));
+                    point1 = point2;
+                    break;
+
+                case G1_FXYZ_LINE:
+
+                    if (point1 == null) {
+                        throw new GcodeException("Invalid point1..\n" + line.getLineString());
+                    }
+
+
+                    if(!point1.isLaserOn()) {
+                        items.add(new StartItem());
+                    }                    
+                    
+                    point2 = new Point(line, true);
+                    if (!point2.equals(point1)) {
+                        items.add(new LaserOn3DItem(point1, point2, speed));
+                        point1 = point2;
+                    }
                     break;
                 default:    //Do nothing for the rest.   
             }
         }
-
+        
         StringBuilder builder = new StringBuilder();
 
         items.stream().forEach((item) -> {
             builder.append(item.getString()).append("\n");
         });
-        
+
         return new String(builder).trim();
     }
 }

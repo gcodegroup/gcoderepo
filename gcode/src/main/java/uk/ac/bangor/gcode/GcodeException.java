@@ -11,6 +11,10 @@ public class GcodeException extends RuntimeException {
     public GcodeException() {
     }
 
+    public GcodeException(String message) {
+        super(message);
+    }
+    
     public GcodeException(String message, Throwable cause) {
         super(message, cause);
     }
