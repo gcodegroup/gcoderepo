@@ -21,7 +21,7 @@ public class OutputFileFilter extends FileFilter {
     
     @Override
     public String getDescription() {
-        return "Only directories and gout files will be displayed.";
+        return "Show only folders and gout files";
     }
     
 }

@@ -2,6 +2,7 @@ package uk.ac.bangor.gcode;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.log4j.Logger;
 
 /**
  * The GcodeTranslator class contains a method to translate the Gcode to new
@@ -10,6 +11,8 @@ import java.util.List;
  * @author zc
  */
 public final class GcodeTranslator {
+
+    Logger logger = GcodeRepositoryManager.getInstance().getLogger(getClass());
 
     /**
      * Translate the Gcode file lines.
@@ -35,18 +38,19 @@ public final class GcodeTranslator {
                     break;
 
                 case G1_EFXY_LINE:
-                    
+
                     if (point1 == null) {
                         throw new GcodeException("Invalid point1.\n" + line.getLineString());
                     }
 
-                    if(!point1.isLaserOn()) {
+                    if (!point1.isLaserOn()) {
                         items.add(new StartItem());
                     }
-                    
+
                     point2 = new Point(line, true);
                     items.add(new LaserOn2dItem(point1, point2, speed));
                     point1 = point2;
+                    logger.trace("Line translated: " + line.getLineString());
                     break;
                 case G1_EXY_LINE:
 
@@ -59,6 +63,7 @@ public final class GcodeTranslator {
                         items.add(new LaserOn2dItem(point1, point2, speed));
                     }
                     point1 = point2;
+                    logger.trace("Line translated: " + line.getLineString());
                     break;
 
                 case G0_XY_LINE:
@@ -66,12 +71,13 @@ public final class GcodeTranslator {
                     if (point1 == null) {
                         throw new GcodeException("Invalid point1..\n" + line.getLineString());
                     }
-                    
+
                     point2 = new Point(line, false);
                     items.add(new LaserOff2DItem(point2));
                     point1 = point2;
+                    logger.trace("Line translated: " + line.getLineString());
                     break;
-                    
+
                 case G0_FXY_LINE:
 
                     if (point1 == null) {
@@ -81,6 +87,7 @@ public final class GcodeTranslator {
                     point2 = new Point(line, false);
                     items.add(new LaserOff2DItem(point2));
                     point1 = point2;
+                    logger.trace("Line translated: " + line.getLineString());
                     break;
 
                 case G1_FXYZ_LINE:
@@ -89,21 +96,25 @@ public final class GcodeTranslator {
                         throw new GcodeException("Invalid point1..\n" + line.getLineString());
                     }
 
-
-                    if(!point1.isLaserOn()) {
+                    if (!point1.isLaserOn()) {
                         items.add(new StartItem());
-                    }                    
-                    
+                    }
+
                     point2 = new Point(line, true);
                     if (!point2.equals(point1)) {
                         items.add(new LaserOn3DItem(point1, point2, speed));
                         point1 = point2;
-                    }
+                        logger.trace("Line translated: " + line.getLineString());
+                    } else {
+                        logger.debug("Line NOT translated: " + line.getLineString());
+                    }             
                     break;
-                default:    //Do nothing for the rest.   
+                    
+                default:
+                    logger.debug("Line NOT translated: " + line.getLineString());
             }
         }
-        
+
         StringBuilder builder = new StringBuilder();
 
         items.stream().forEach((item) -> {

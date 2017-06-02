@@ -39,7 +39,7 @@ public class LineReader {
                 String validLine = fileLine.getLineString();
                 if(validLine != null && !validLine.trim().isEmpty()) {
                     lines.add(fileLine);
-            //        logger.debug("Added to process: " + line);
+                    logger.trace("Added to process: " + line);
                 } else {
                     logger.debug("Dropped line:     " + line);
                 }
