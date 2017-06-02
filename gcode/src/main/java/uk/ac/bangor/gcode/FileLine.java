@@ -12,35 +12,56 @@ public final class FileLine {
     private final String lineString;
     private final LineType lineStatus;
 
-    public FileLine(String lineString) {
+    public FileLine(String line) {
 
-        this.lineString = lineString;
+        lineString = line == null ? null : (line.contains(";") ? line.split(";")[0].trim() : line.trim());
 
-        if (lineString == null) {
+        if (lineString == null || lineString.isEmpty()) {
             lineStatus = LineType.UNUSED_LINE;
             return;
         }
-
-        if (lineString.trim().startsWith(";")) {
-            lineStatus = LineType.COMMENT;
+        
+        if (lineString.contains("G0") && !lineString.contains("E") && lineString.contains("F") && lineString.contains("X") && lineString.contains("Y") && lineString.contains("Z")) {
+            lineStatus = LineType.G0_FXYZ_LINE;
             return;
         }
 
-        if (lineString.contains("G") && !lineString.contains("F") && lineString.contains("X") && lineString.contains("Y") && lineString.contains("E")) {
-            lineStatus = LineType.GXYE_LINE;
+        if (lineString.contains("G0") && !lineString.contains("E")  && lineString.contains("F") && lineString.contains("X") && lineString.contains("Y") && !lineString.contains("Z")) {
+            lineStatus = LineType.G0_FXY_LINE;
             return;
         }
 
-        if (lineString.contains("G") && lineString.contains("F") && lineString.contains("X") && lineString.contains("Y") && lineString.contains("E")) {
-            lineStatus = LineType.GFXYE_LINE;
+        if (lineString.contains("G0") && !lineString.contains("E")  && !lineString.contains("F") && lineString.contains("X") && lineString.contains("Y")) {
+            lineStatus = LineType.G0_XY_LINE;
+            return;
+        }        
+        
+        if (lineString.contains("G1") && lineString.contains("E") && lineString.contains("F") &&  !lineString.contains("X") && !lineString.contains("Y") && !lineString.contains("Z")) {
+            lineStatus = LineType.G1_EF_LINE;
             return;
         }
-
-        if (lineString.contains("G") && lineString.contains("F") && lineString.contains("X") && lineString.contains("Y") && !lineString.contains("E")) {
-            lineStatus = LineType.GFXY_LINE;
+        
+        if (lineString.contains("G1") && lineString.contains("E") && lineString.contains("F") && lineString.contains("X") &&  lineString.contains("Y") &&  !lineString.contains("Z")) {
+            lineStatus = LineType.G1_EFXY_LINE;
             return;
         }
+        
+        if (lineString.contains("G1") && lineString.contains("E") && !lineString.contains("F") && lineString.contains("X") && lineString.contains("Y") && !lineString.contains("Z")) {
+            lineStatus = LineType.G1_EXY_LINE;
+            return;
+        }        
 
+        if (lineString.contains("G1") && !lineString.contains("E") && !lineString.contains("T") && lineString.contains("X") && lineString.contains("Y") && !lineString.contains("Z")) {
+            lineStatus = LineType.G1_XY_LINE;
+            return;
+        }          
+        
+        
+        if (line.contains("G1") && line.contains("F") && line.contains("X") && line.contains("Y") && !line.contains("Z")) {
+            lineStatus = LineType.G1_FXYZ_LINE;
+            return;
+        }        
+        
         lineStatus = LineType.UNUSED_LINE;
     }
 
