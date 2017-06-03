@@ -28,6 +28,7 @@ public final class InputFilePropertyChangeListener implements PropertyChangeList
         
         GcodeModel model = (GcodeModel) evt.getSource();
         inputFileJTextArea.setText(model.getGcodeFile().getFileString());
+        inputFileJTextArea.setCaretPosition(0);
         translateJButton.setEnabled(model.isValidOriginalText());
         saveParametersJMenuItem.setEnabled(model.isParametersOkToBeSaved());
     }

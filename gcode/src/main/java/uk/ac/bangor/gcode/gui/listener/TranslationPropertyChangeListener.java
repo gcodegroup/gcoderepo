@@ -29,6 +29,7 @@ public class TranslationPropertyChangeListener implements PropertyChangeListener
         
         GcodeModel model = (GcodeModel) evt.getSource();
         translateJTextArea.setText(model.getTranslatedText());
+        translateJTextArea.setCaretPosition(0);
         
         MainStatus mainStatus = model.getMainStatus();
         saveJButton.setEnabled(mainStatus.canBeProcessed()); 

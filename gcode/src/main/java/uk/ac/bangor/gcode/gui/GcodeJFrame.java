@@ -19,6 +19,7 @@ import uk.ac.bangor.gcode.gui.listener.NumericPropertyChangeListener;
 import uk.ac.bangor.gcode.gui.listener.OutputDocumentListener;
 import uk.ac.bangor.gcode.gui.listener.OutputFileFilter;
 import uk.ac.bangor.gcode.gui.listener.OutputFilePathPropertyChangeListener;
+import uk.ac.bangor.gcode.gui.listener.ResultSavedPropertyChangeListener;
 import uk.ac.bangor.gcode.gui.listener.TranslationPropertyChangeListener;
 
 public class GcodeJFrame extends javax.swing.JFrame {
@@ -58,6 +59,7 @@ public class GcodeJFrame extends javax.swing.JFrame {
         model.addPropertyChangeListener(GcodeModel.START_DELAY_TIME_PROPERTY, new NumericPropertyChangeListener(gcodeTranslator));
         model.addPropertyChangeListener(GcodeModel.SPEED_PROPERTY, new NumericPropertyChangeListener(gcodeTranslator));
         model.addPropertyChangeListener(GcodeModel.OUTPUT_FILE_PATH_PROPERTY, new OutputFilePathPropertyChangeListener(outputErrorWarningMessageJLabel, saveOutputJButton, saveParametersJMenuItem));
+        model.addPropertyChangeListener(GcodeModel.RESULT_SAVED_PROPERTY, new ResultSavedPropertyChangeListener(saveOutputJButton, outputErrorWarningMessageJLabel));
     }
 
     /**
@@ -98,11 +100,15 @@ public class GcodeJFrame extends javax.swing.JFrame {
 
         inputJTextArea.setEditable(false);
         inputJTextArea.setColumns(20);
+        inputJTextArea.setForeground(new java.awt.Color(51, 255, 255));
         inputJTextArea.setRows(5);
         inputJScrollPane.setViewportView(inputJTextArea);
 
+        outputJTextArea.setEditable(false);
         outputJTextArea.setColumns(20);
+        outputJTextArea.setForeground(new java.awt.Color(0, 0, 255));
         outputJTextArea.setRows(5);
+        outputJTextArea.setEnabled(false);
         outputJScrollPane.setViewportView(outputJTextArea);
 
         translateJButton.setText("Translate");
@@ -309,6 +315,7 @@ public class GcodeJFrame extends javax.swing.JFrame {
 
     private void saveOutputJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveOutputJButtonActionPerformed
         writer.write(model.getOutputFilePath(), model.getTranslatedText());
+        model.setResultSaved(true);
     }//GEN-LAST:event_saveOutputJButtonActionPerformed
 
     private void exitJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitJMenuItemActionPerformed
