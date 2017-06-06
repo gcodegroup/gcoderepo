@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 /**
- * The GcodeTranslator class contains a method to translate the Gcode to new
+ * The GcodeTranslator class contains a method to translate the Gcode to GCS
  * code.
  *
  * @author zc
@@ -37,7 +37,7 @@ public final class GcodeTranslator {
 
                 case G0_FXYZ_LINE:
                     point1 = new Point(line, false);
-                    items.add(new LaserOff3dOperation(point1));
+                    items.add(new LaserOff3dOperation(point1, initialDelayTime));
                     break;
 
                 case G1_EFXY_LINE:
@@ -76,7 +76,7 @@ public final class GcodeTranslator {
                     }
 
                     point2 = new Point(line, false);
-                    items.add(new LaserOff2dOperation(point2));
+                    items.add(new LaserOff2dOperation(point2, initialDelayTime));
                     point1 = point2;
                     logger.trace("Line translated: " + line.getLineString());
                     break;
@@ -88,7 +88,7 @@ public final class GcodeTranslator {
                     }
 
                     point2 = new Point(line, false);
-                    items.add(new LaserOff2dOperation(point2));
+                    items.add(new LaserOff2dOperation(point2, initialDelayTime));
                     point1 = point2;
                     logger.trace("Line translated: " + line.getLineString());
                     break;

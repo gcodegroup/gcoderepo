@@ -28,17 +28,21 @@ public class GcodeGuiRunner {
          */
         GcodeRepositoryManager gcodeRepositoryManager = GcodeRepositoryManager.getInstance();
         Logger logger = gcodeRepositoryManager.getLogger(GcodeGuiRunner.class);
-
+        
         try {
 
             // Try to get LOCK //
+            logger.debug("Try to get the application lock......");
             if (!AppLock.setLock("gcode.customer.lock.key")) {
-                throw new GcodeException("Only one application instance may run at the same time!\n"
-                        + "Check if you have another instance opend.\n "
+                throw new GcodeException("Fail to set the application lock.\n"
+                        + "Only one application instance may run at the same time!\n"
+                        + "Check if you have another instance opened.\n "
                         + "The problem may persist if your applicaiton did NOT terminate normally last time.\n"
                         + "In this case you have to restart your computer.");
             }
-
+            logger.debug("The application lock has been set OK.");
+            
+            logger.debug("Read the parameters......");
             gcodeRepositoryManager.readRunningParameters();
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -49,13 +53,15 @@ public class GcodeGuiRunner {
 
             /* Create and display the form */
             java.awt.EventQueue.invokeLater(() -> {
+                logger.debug("Start the GUI......");
                 new GcodeJFrame().setVisible(true);
+                logger.debug("The GUI starts OK.");
             });
-
+            
         } catch (Throwable th) {
             logger.error(th);
             AppLock.releaseLock(); // Release lock
-            JOptionPane.showMessageDialog(null, th.getMessage() , "Error", JOptionPane.OK_OPTION);
+            JOptionPane.showMessageDialog(null, th.getMessage(), "Error", JOptionPane.OK_OPTION);
             System.exit(-1);
             
         } //</editor-fold>

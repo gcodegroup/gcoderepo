@@ -13,7 +13,6 @@ import uk.ac.bangor.gcode.GcodeRepositoryManager;
 import uk.ac.bangor.gcode.GcodeTranslator;
 import uk.ac.bangor.gcode.OutputFileWriter;
 import uk.ac.bangor.gcode.RunningParameters;
-import static uk.ac.bangor.gcode.gui.GcodeModel.INPUT_FILE_TRANSLATED_STATUS_PROPERTY;
 import uk.ac.bangor.gcode.gui.listener.InputFileDocumentListener;
 import uk.ac.bangor.gcode.gui.listener.InputFileFilter;
 import uk.ac.bangor.gcode.gui.listener.InputFilePathPropertyChangeListener;

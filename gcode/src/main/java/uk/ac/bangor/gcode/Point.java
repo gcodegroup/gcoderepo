@@ -13,14 +13,14 @@ public final class Point {
     private final boolean layserOn;
 
     /**
-     * 
+     * Construct an object using a line object with laser option.
      * @param line
-     * @param layserOn 
+     * @param laserOn - true if the laser is on
      */
-    public Point(FileLine line, boolean layserOn) {
+    public Point(FileLine line, boolean laserOn) {
 
         String[] cells = line.getLineString().split(" ");
-        this.layserOn = layserOn;
+        this.layserOn = laserOn;
 
         String xString = null;
         String yString = null;

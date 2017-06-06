@@ -57,7 +57,7 @@ public final class FileLine {
         }          
         
         
-        if (line.contains("G1") && line.contains("F") && line.contains("X") && line.contains("Y") && !line.contains("Z")) {
+        if (lineString.contains("G1") && lineString.contains("F") && lineString.contains("X") && lineString.contains("Y") && !lineString.contains("Z")) {
             lineStatus = LineType.G1_FXYZ_LINE;
             return;
         }        

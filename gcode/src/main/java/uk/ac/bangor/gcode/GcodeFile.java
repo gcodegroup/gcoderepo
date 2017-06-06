@@ -19,10 +19,20 @@ public class GcodeFile {
         this.fileLines = Collections.unmodifiableList(fileLines);
     }
 
+    /**
+     * Get the file contents as a single string.
+     *
+     * @return the file contents as a single string.
+     */
     public String getFileString() {
         return fileString;
     }
 
+    /**
+     * Get a list of lines inside this file.
+     *
+     * @return the list of FileLine objects.
+     */
     public List<FileLine> getFileLines() {
         return fileLines;
     }

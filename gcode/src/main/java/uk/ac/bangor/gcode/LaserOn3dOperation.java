@@ -4,8 +4,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 /**
- * The LaserOn3dItem class represents a movement from one point to another with
- * the laser switched on.
+ * The LaserOn3dItem class represents a three-dimension movement from one point
+ * to another with the laser switched on.
  *
  * @author zc
  */
@@ -13,9 +13,10 @@ public final class LaserOn3dOperation extends AbstractGcodeOperation {
 
     /**
      * Construct a LaserOn3dItem object.
+     *
      * @param point1 - The start point.
      * @param point2 - The finish point.
-     * @param speed  - the moving speed.
+     * @param speed - the moving speed.
      */
     public LaserOn3dOperation(Point point1, Point point2, double speed) {
 
@@ -23,7 +24,7 @@ public final class LaserOn3dOperation extends AbstractGcodeOperation {
     }
 
     private static String getString(Point point1, Point point2, double speed) {
-        
+
         String x = getString(point1.getX());
         String y = getString(point1.getY());
 
