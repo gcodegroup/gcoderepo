@@ -1,12 +1,11 @@
 package uk.ac.bangor.gcode;
 
 /**
- * The GcodeItem interface defines an item which represent the operation to be
- * proceeded in the following step.
+ * The GcodeOperation interface defines an operation to be proceeded.
  *
  * @author zc
  */
-public interface GcodeItem {
+public interface GcodeOperation {
 
     /**
      * Get the string description for the status. This string will be used as a

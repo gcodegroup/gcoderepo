@@ -2,20 +2,23 @@ package uk.ac.bangor.gcode.gui;
 
 import java.awt.Color;
 
-public enum InputFilePathStatus {
+/**
+ *
+ * @author zc
+ */
+public enum InputFileTranslatedStatus {
 
-    
-    EMPTY_INPUT_FILE_PATH("", false, Color.WHITE, false), 
-    POSSIBLE_WRONG_TYPE_FILE("The file may be invalid", true, Color.ORANGE, true),
-    INVALID_INPUT_FILE_PATH("Invalid input file path", true, Color.RED, false),
-    VALID_INPUT_FILE_PATH("", false, Color.WHITE, true);
-          
+    NO_INPUT_FILE("", false, Color.WHITE, false),
+    INPUT_FILE_NOT_TRANSLATED ("The input file has NOT been translated", true, Color.ORANGE, true),
+    INVALID_INPUT_FILE ("Invalid input file", true, Color.RED, false),
+    INPUT_FILE_TRANSLATED ("The input file has been translated", true, Color.GREEN, false);
+
     private final String message;
     private final boolean visible;
     private final Color color;
     private final boolean canBeProcessed;
 
-    private InputFilePathStatus(String message,boolean visible, Color color, boolean canBeProcessed) {
+    private InputFileTranslatedStatus(String message, boolean visible, Color color, boolean canBeProcessed) {
         this.message = message;
         this.visible = visible;
         this.color = color;
@@ -36,5 +39,5 @@ public enum InputFilePathStatus {
 
     public boolean canBeProcessed() {
         return canBeProcessed;
-    }
+    }    
 }

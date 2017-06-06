@@ -9,9 +9,14 @@ import uk.ac.bangor.gcode.LineReader;
 import uk.ac.bangor.gcode.gui.GcodeModel;
 import uk.ac.bangor.gcode.gui.InputFilePathStatus;
 
+/**
+ * The InputFilePathPropertyChangeListener class listen to the change of input
+ * file path. The related property is GcodeModel.INPUT_FILE_PATH_PROPERTY.
+ *
+ * @author zc
+ */
+public final class InputFilePathPropertyChangeListener implements PropertyChangeListener {
 
-public class InputFilePathPropertyChangeListener implements PropertyChangeListener {
-    
     private final LineReader lineReader = new LineReader();
     private final JLabel errorJLabel;
 
@@ -21,18 +26,21 @@ public class InputFilePathPropertyChangeListener implements PropertyChangeListen
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        
+
         GcodeModel model = (GcodeModel) evt.getSource();
         InputFilePathStatus inputFilePathStatus = model.getInputFilePathStatus();
+        
         errorJLabel.setVisible(inputFilePathStatus.isVisible());
-        if(inputFilePathStatus.canBeProcessed()) {
+        errorJLabel.setText(inputFilePathStatus.getMessage());
+        
+        if (inputFilePathStatus.canBeProcessed()) {
             try {
                 model.setGcodeFile(lineReader.load(model.getInputFilePath()));
             } catch (IOException ex) {
                 throw new GcodeException(ex);
             }
-        } 
-        
-        model.setTranslatedText(null);
+        } else {
+            model.setGcodeFile(null);
+        }
     }
 }

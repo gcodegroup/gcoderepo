@@ -14,19 +14,21 @@ public class GcodeModel {
     public static final String TRANSLATED_TEXT_PROPERTY = "TRANSLATED_TEXT_PROPERTY";
     public static final String SPEED_PROPERTY = "SPEED_PROPERTY";
     public static final String START_DELAY_TIME_PROPERTY = "START_DELAY_TIME_PROPERTY";
-    public static final String RESULT_SAVED_PROPERTY = "RESULT_SAVED_PROPERTY";
+    public static final String INPUT_FILE_PATH_STATUS_PROPERTY = "INPUT_FILE_PATH_STATUS_PROPERTY";
+    public static final String INPUT_FILE_TRANSLATED_STATUS_PROPERTY = "INPUT_FILE_TRANSLATED_PROPERTY";
+    public static final String RESULT_SAVED_STATUS_PROPERTY = "RESULT_SAVED_PROPERTY";
 
     private final RunningParameters runningParameters = RunningParameters.getInstance();
     
     private String inputFilePath;
+    private GcodeFile gcodeFile;  
+    private String translatedText;    
     private String outputFilePath;
-    private String translatedText;
-    private GcodeFile gcodeFile;
     private int movingSpeed = runningParameters.getMovingSpeed();
     private int initialDelayTime = runningParameters.getInitialDelayTime();
-    private InputFilePathStatus inputFilePathStatus = InputFilePathStatus.EMPTY_PATH;
-    private boolean resultSaved = true;
-    private MainStatus mainStatus = MainStatus.INPUT_FILE_NOT_TRANSLATED;
+    private InputFilePathStatus inputFilePathStatus = InputFilePathStatus.EMPTY_INPUT_FILE_PATH;
+    private InputFileTranslatedStatus inputFileStatus = InputFileTranslatedStatus.NO_INPUT_FILE;
+    private MainStatus mainStatus = MainStatus.NO_TRANSLATED_RESULT;
 
     private final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
@@ -38,10 +40,9 @@ public class GcodeModel {
         
         String oldValue = this.inputFilePath;
         this.inputFilePath = inputFilePath;
-        gcodeFile = null;
         inputFilePathStatus = (inputFilePath == null || inputFilePath.trim().isEmpty()) ? 
-                InputFilePathStatus.EMPTY_PATH : (new File(inputFilePath).isFile() ? 
-                (inputFilePath.toLowerCase().endsWith(".gcode") ? InputFilePathStatus.OK : InputFilePathStatus.POSSIBLE_WRONG_TYPE) 
+                InputFilePathStatus.EMPTY_INPUT_FILE_PATH : (new File(inputFilePath).isFile() ? 
+                (inputFilePath.toLowerCase().endsWith(".gcode") ? InputFilePathStatus.VALID_INPUT_FILE_PATH : InputFilePathStatus.POSSIBLE_WRONG_TYPE_FILE) 
                : InputFilePathStatus.INVALID_INPUT_FILE_PATH);
         propertyChangeSupport.firePropertyChange(INPUT_FILE_PATH_PROPERTY, oldValue, inputFilePath);
     }
@@ -51,10 +52,9 @@ public class GcodeModel {
     }
 
     public synchronized void setOutputFilePath(String outputFilePath) {
+        
         String oldValue = this.outputFilePath;
-        this.outputFilePath = outputFilePath;
-        resultSaved = false;        
-        mainStatus = createMainMessageStatus();        
+        this.outputFilePath = outputFilePath;         
         propertyChangeSupport.firePropertyChange(OUTPUT_FILE_PATH_PROPERTY, oldValue, outputFilePath);
     }
 
@@ -65,8 +65,6 @@ public class GcodeModel {
     public synchronized void setTranslatedText(String translatedText) {
         String oldValue = this.translatedText;
         this.translatedText = translatedText;
-        resultSaved = false;
-        mainStatus = createMainMessageStatus();
         propertyChangeSupport.firePropertyChange(TRANSLATED_TEXT_PROPERTY, oldValue, translatedText);
     }
 
@@ -105,16 +103,10 @@ public class GcodeModel {
         propertyChangeSupport.firePropertyChange(START_DELAY_TIME_PROPERTY, oldValue, initialDelayTime);
     }
 
-    public synchronized boolean isResultSaved() {
-        return resultSaved;
-    }
-
     public synchronized void setResultSaved(boolean resultSaved) {
         
-        boolean oldValue = this.resultSaved;
-        this.resultSaved = resultSaved;
-        mainStatus = createMainMessageStatus();
-        propertyChangeSupport.firePropertyChange(RESULT_SAVED_PROPERTY, oldValue, resultSaved);        
+        mainStatus = createMainMessageStatus(resultSaved);
+        propertyChangeSupport.firePropertyChange(RESULT_SAVED_STATUS_PROPERTY, true, false);        
     }
 
 
@@ -136,10 +128,31 @@ public class GcodeModel {
         return runningParameters.getOutputFilePath();
     }
     
-    private MainStatus createMainMessageStatus() {
+    public synchronized void setInputFileTranslated(boolean translated) {
+        
+        InputFileTranslatedStatus oldValue = inputFileStatus;
+        
+        if(gcodeFile == null || gcodeFile.getFileString() == null || gcodeFile.getFileString().trim().isEmpty()) {
+            inputFileStatus = InputFileTranslatedStatus.NO_INPUT_FILE;
+        } else {
+            if(translated) {
+                inputFileStatus = InputFileTranslatedStatus.INPUT_FILE_TRANSLATED;
+            } else {
+                inputFileStatus = InputFileTranslatedStatus.INPUT_FILE_NOT_TRANSLATED;
+            }
+        }
+        
+        propertyChangeSupport.firePropertyChange(INPUT_FILE_TRANSLATED_STATUS_PROPERTY, oldValue, inputFileStatus);           
+    }
+
+    public synchronized InputFileTranslatedStatus getInputFileStatus() {
+        return inputFileStatus;
+    }
+    
+    private MainStatus createMainMessageStatus(boolean resultSaved) {
 
         if(translatedText == null || translatedText.trim().isEmpty()) {
-            return MainStatus.INPUT_FILE_NOT_TRANSLATED;
+            return MainStatus.NO_TRANSLATED_RESULT;
         }
         
         if(outputFilePath == null || new File(outputFilePath).isDirectory()) {
@@ -148,14 +161,6 @@ public class GcodeModel {
         }
         
         return resultSaved ? MainStatus.RESULT_SAVED : (new File(outputFilePath).isFile() ? MainStatus.OUTPUT_FILE_EXISTS : MainStatus.RESULT_NOT_SAVED);
-    }
-    
-    public synchronized boolean isValidOriginalText() {
-        return gcodeFile != null && gcodeFile.getFileString() != null && !gcodeFile.getFileString().trim().isEmpty();
-    }
-
-    public synchronized boolean isValidTranslatedText() {
-        return translatedText != null && !translatedText.trim().isEmpty();
     }
     
     public synchronized boolean isParametersOkToBeSaved() {

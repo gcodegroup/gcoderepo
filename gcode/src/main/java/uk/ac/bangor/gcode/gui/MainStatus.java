@@ -5,7 +5,7 @@ import java.awt.Color;
 
 public enum MainStatus {
 
-    INPUT_FILE_NOT_TRANSLATED("OK", false, null, false),
+    NO_TRANSLATED_RESULT("No translated result to be saved", false, Color.BLUE, false),
     INVALID_OUTPUT_FILE_PATH("Invalid output file path", true, Color.RED, false),
     OUTPUT_FILE_EXISTS("The outp file already exists", true, Color.ORANGE, true),
     RESULT_NOT_SAVED("Result has NOT been saved", true, Color.ORANGE, true),
