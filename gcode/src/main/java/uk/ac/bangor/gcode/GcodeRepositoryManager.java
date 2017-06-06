@@ -20,9 +20,9 @@ public final class GcodeRepositoryManager {
     static {
         System.setProperty("gcode.home", GCODE_HOME);
     }
-    
+
     private static final GcodeRepositoryManager GCODE_REPOSITORY_MANAGER = new GcodeRepositoryManager();
-    
+
     private final Properties properties = new Properties();
     private final String gcodeTranslatorHome = GCODE_HOME;
     private final File gcodeTranslatorPropertyFile = new File(gcodeTranslatorHome + File.separator + "prop" + File.separator + "gcode-parameters.properties");
@@ -40,11 +40,24 @@ public final class GcodeRepositoryManager {
         return GCODE_REPOSITORY_MANAGER;
     }
 
+    /**
+     * Read the parameters from the file located at [User
+     * Home]/gcode-translator/prop/gcode-parameters.properties
+     *
+     * @throws IOException if the file cannot be accessed.
+     */
     public synchronized void readRunningParameters() throws IOException {
 
         readRunningParameters(gcodeTranslatorPropertyFile);
     }
 
+    /**
+     * Read the parameters from the given file.
+     *
+     * @param gcodeTranslatorPropertyFile - The specified file.
+     * @throws IOException if the file cannot be accessed.
+     * @throws NullPointerException if specified file object is null.
+     */
     public synchronized void readRunningParameters(File gcodeTranslatorPropertyFile) throws IOException {
 
         if (!gcodeTranslatorPropertyFile.exists()) {
@@ -88,6 +101,12 @@ public final class GcodeRepositoryManager {
         }
     }
 
+    /**
+     * Store the parameters to [User
+     * Home]/gcode-translator/prop/gcode-parameters.properties
+     *
+     * @throws IOException
+     */
     public synchronized void writeRunningParameters() throws IOException {
 
         try (FileOutputStream fileOutputStream = new FileOutputStream(gcodeTranslatorPropertyFile)) {
@@ -95,10 +114,12 @@ public final class GcodeRepositoryManager {
         }
     }
 
-    public String getUserHome() {
-        return USER_HOME;
-    }
-
+    /**
+     * Get a logger for the given class.
+     * @param <T> - The class type.
+     * @param klass - The specified class object.
+     * @return the created logger.
+     */
     public <T> Logger getLogger(Class<T> klass) {
         return Logger.getLogger(klass);
     }

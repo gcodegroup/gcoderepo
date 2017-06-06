@@ -4,30 +4,31 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 /**
+ * The LaserOff3dOperation class represents a three-dimension movement with the
+ * laser turned off.
  *
  * @author zc
  */
 public final class LaserOff3dOperation extends AbstractGcodeOperation {
 
-    public LaserOff3dOperation(Point point) {
-        super(getString(point));
+    public LaserOff3dOperation(Point point, int initialDelayTime) {
+        super(getString(point, initialDelayTime));
     }
-  
 
-    private static String getString(Point point) {
+    private static String getString(Point point, int initialDelayTime) {
 
         String x = getString(point.getX());
         String y = getString(point.getY());
         String z = getString(point.getZ());
-        
-        return "CTO 1 7 0\n" +
-               "DEL " + RunningParameters.getInstance().getInitialDelayTime() + "\n" +
-               "CTO 1 7 1\n" + 
-               "MOV A " + x + " B " + y + " C " + z;
+
+        return "CTO 1 7 0\n"
+                + "DEL " + initialDelayTime + "\n"
+                + "CTO 1 7 1\n"
+                + "MOV A " + x + " B " + y + " C " + z;
     }
 
     private static String getString(double value) {
         return new BigDecimal(value).setScale(4, RoundingMode.HALF_UP).toPlainString();
-    }    
-    
+    }
+
 }

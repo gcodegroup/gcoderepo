@@ -12,34 +12,6 @@ public enum LineType {
      * The line with G0, F, X, Y and Z. This line is used to turn off the laser and move to the new position. 
      * For example: G0 F9000 X42.385 Y44.175 Z0.300
      * 
-     *//**
-     * The line with G0, F, X, Y and Z. This line is used to turn off the laser and move to the new position. 
-     * For example: G0 F9000 X42.385 Y44.175 Z0.300
-     * 
-     *//**
-     * The line with G0, F, X, Y and Z. This line is used to turn off the laser and move to the new position. 
-     * For example: G0 F9000 X42.385 Y44.175 Z0.300
-     * 
-     *//**
-     * The line with G0, F, X, Y and Z. This line is used to turn off the laser and move to the new position. 
-     * For example: G0 F9000 X42.385 Y44.175 Z0.300
-     * 
-     *//**
-     * The line with G0, F, X, Y and Z. This line is used to turn off the laser and move to the new position. 
-     * For example: G0 F9000 X42.385 Y44.175 Z0.300
-     * 
-     *//**
-     * The line with G0, F, X, Y and Z. This line is used to turn off the laser and move to the new position. 
-     * For example: G0 F9000 X42.385 Y44.175 Z0.300
-     * 
-     *//**
-     * The line with G0, F, X, Y and Z. This line is used to turn off the laser and move to the new position. 
-     * For example: G0 F9000 X42.385 Y44.175 Z0.300
-     * 
-     *//**
-     * The line with G0, F, X, Y and Z. This line is used to turn off the laser and move to the new position. 
-     * For example: G0 F9000 X42.385 Y44.175 Z0.300
-     * 
      */
     G0_FXYZ_LINE,
     
@@ -58,18 +30,38 @@ public enum LineType {
      */    
     G0_XY_LINE,
     
-    
+    /**
+     * The line with G1, E and F. This line is probably unused. 
+     * 
+     */       
     G1_EF_LINE, 
     
-    
+     /**
+     * The line with G1, E, F, X and Y. This line is used to turn on the laser and move to the new position. 
+     * For example: G0 F9000 X42.035 Y43.814
+     * 
+     */      
     G1_EFXY_LINE, 
     
-    
+     /**
+     * The line with G1, E, X and Y. This line is used to turn off the laser and move to the new position. 
+     * For example: G0 F9000 X42.035 Y43.814
+     * 
+     */      
     G1_EXY_LINE, 
     
+     /**
+     * The line with G1, F, X, Y and Z. This line is used to turn off the laser and move to the new position. 
+     * For example: G0 F9000 X42.035 Y43.814
+     * 
+     */   
     G1_FXYZ_LINE,     
     
-    
+     /**
+     * The line with G1, X and Y. This line is used to turn off the laser and move to the new position. 
+     * For example: G0 F9000 X42.035 Y43.814
+     * 
+     */      
     G1_XY_LINE,     
     
     /**

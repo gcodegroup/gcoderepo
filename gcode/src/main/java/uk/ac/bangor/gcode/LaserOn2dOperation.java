@@ -4,7 +4,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 /**
- * The LaserOn2dOperation class represents a movement from one point to another.
+ * The LaserOn2dOperation class represents a two-dimension movement from one
+ * point to another with the laser turned on.
  *
  * @author zc
  */
@@ -26,9 +27,9 @@ public final class LaserOn2dOperation extends AbstractGcodeOperation {
         String vx = getString(speed * xDistance / Math.sqrt(xDistance * xDistance + yDistance * yDistance));
         String vy = getString(speed * yDistance / Math.sqrt(xDistance * xDistance + yDistance * yDistance));
 
-        return "VEL A " + vx + " B " + vy + "\n" +
-               "MOV A " + x + " B " + y + "\n" +
-               "DEL " + delayTime;
+        return "VEL A " + vx + " B " + vy + "\n"
+                + "MOV A " + x + " B " + y + "\n"
+                + "DEL " + delayTime;
 
     }
 

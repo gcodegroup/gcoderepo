@@ -16,7 +16,7 @@ import uk.ac.bangor.gcode.GcodeException;
  * http://nerdydevel.blogspot.com/2012/07/run-only-single-java-application-instance.html
  * @author rumatoest
  */
-public class AppLock {
+public final class AppLock {
 
     /**
      * The instance.
@@ -101,22 +101,22 @@ public class AppLock {
     /**
      * Release Lock. Now another application instance can gain lock.
      *
-     * @throws IOException
+     * @throws IOException if an IO error occurs.
      */
     private void release() throws IOException {
 
         if (lock.isValid()) {
             lock.release();
         }
-        
+
         if (lock_stream != null) {
             lock_stream.close();
         }
-        
+
         if (lock_channel.isOpen()) {
             lock_channel.close();
         }
-        
+
         if (lock_file.exists()) {
             lock_file.delete();
         }
@@ -137,7 +137,7 @@ public class AppLock {
      * @return true, if successful
      */
     public static boolean setLock(String key) {
-        
+
         if (instance != null) {
             return true;
         }
@@ -146,11 +146,15 @@ public class AppLock {
             instance = new AppLock(key);
         } catch (Exception ex) {
             instance = null;
-            throw new GcodeException("Fail to set AppLoc", ex);
+            throw new GcodeException("Fail to set the application lock.\n"
+                    + "Only one application instance may run at the same time!\n"
+                    + "Check if you have another instance opened.\n "
+                    + "The problem may persist if your applicaiton did NOT terminate normally last time.\n"
+                    + "In this case you will have to restart your computer.", ex);
         }
 
         Runtime.getRuntime().addShutdownHook(new Thread() {
-            
+
             @Override
             public void run() {
                 AppLock.releaseLock();
@@ -166,17 +170,17 @@ public class AppLock {
      *
      */
     public static void releaseLock() {
-        
+
         try {
-            
+
             if (instance == null) {
                 return;
             }
-            
+
             instance.release();
-            
+
         } catch (IOException ex) {
-            
+
             throw new GcodeException("Failed to release the application lock", ex);
         }
     }
