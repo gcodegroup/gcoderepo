@@ -1,3 +1,4 @@
+
 package uk.ac.bangor.gcode;
 
 import java.math.BigDecimal;
@@ -5,11 +6,11 @@ import java.math.RoundingMode;
 
 /**
  *
- * @author zc
+ * @author Administrator
  */
-public final class LaserOff3DItem extends AbstractGcodeItem {
-
-    public LaserOff3DItem(Point point) {
+public final class LaserOff2dOperation extends AbstractGcodeOperation {
+    
+    public LaserOff2dOperation(Point point) {
         super(getString(point));
     }
   
@@ -18,12 +19,11 @@ public final class LaserOff3DItem extends AbstractGcodeItem {
 
         String x = getString(point.getX());
         String y = getString(point.getY());
-        String z = getString(point.getZ());
         
         return "CTO 1 7 0\n" +
                "DEL " + RunningParameters.getInstance().getInitialDelayTime() + "\n" +
                "CTO 1 7 1\n" + 
-               "MOV A " + x + " B " + y + " C " + z;
+               "MOV A " + x + " B " + y;
     }
 
     private static String getString(double value) {

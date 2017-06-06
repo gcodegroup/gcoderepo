@@ -1,15 +1,22 @@
 package uk.ac.bangor.gcode.gui;
 
+import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 import org.apache.log4j.Logger;
+import uk.ac.bangor.gcode.GcodeException;
 import uk.ac.bangor.gcode.GcodeRepositoryManager;
 
 /**
+ * The GcodeGuiRunner class contains the main method to run the application in
+ * GUI mode.
  *
  * @author zc
  */
 public class GcodeGuiRunner {
 
     /**
+     * The main method to run the application in GUI mode.
+     *
      * @param args the command line arguments
      */
     @SuppressWarnings("UseSpecificCatch")
@@ -24,10 +31,18 @@ public class GcodeGuiRunner {
 
         try {
 
+            // Try to get LOCK //
+            if (!AppLock.setLock("gcode.customer.lock.key")) {
+                throw new GcodeException("Only one application instance may run at the same time!\n"
+                        + "Check if you have another instance opend.\n "
+                        + "The problem may persist if your applicaiton did NOT terminate normally last time.\n"
+                        + "In this case you have to restart your computer.");
+            }
+
             gcodeRepositoryManager.readRunningParameters();
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
             }
@@ -39,8 +54,10 @@ public class GcodeGuiRunner {
 
         } catch (Throwable th) {
             logger.error(th);
+            AppLock.releaseLock(); // Release lock
+            JOptionPane.showMessageDialog(null, th.getMessage() , "Error", JOptionPane.OK_OPTION);
             System.exit(-1);
-        }
-        //</editor-fold>
+            
+        } //</editor-fold>
     }
 }

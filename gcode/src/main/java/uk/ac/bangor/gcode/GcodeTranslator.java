@@ -12,8 +12,6 @@ import org.apache.log4j.Logger;
  */
 public final class GcodeTranslator {
 
-    Logger logger = GcodeRepositoryManager.getInstance().getLogger(getClass());
-
     /**
      * Translate the Gcode file lines.
      *
@@ -22,8 +20,13 @@ public final class GcodeTranslator {
      */
     public String translate(List<FileLine> lines) {
 
-        int speed = RunningParameters.getInstance().getMovingSpeed();
-        List<GcodeItem> items = new ArrayList<>();
+        Logger logger = GcodeRepositoryManager.getInstance().getLogger(getClass());
+        
+        RunningParameters runningParameters = RunningParameters.getInstance();
+        int speed = runningParameters.getMovingSpeed();
+        int initialDelayTime = runningParameters.getInitialDelayTime();
+        
+        List<GcodeOperation> items = new ArrayList<>();
 
         Point point1 = null;
         Point point2;
@@ -34,7 +37,7 @@ public final class GcodeTranslator {
 
                 case G0_FXYZ_LINE:
                     point1 = new Point(line, false);
-                    items.add(new LaserOff3DItem(point1));
+                    items.add(new LaserOff3dOperation(point1));
                     break;
 
                 case G1_EFXY_LINE:
@@ -44,11 +47,11 @@ public final class GcodeTranslator {
                     }
 
                     if (!point1.isLaserOn()) {
-                        items.add(new StartItem());
+                        items.add(new StartOperation(initialDelayTime));
                     }
 
                     point2 = new Point(line, true);
-                    items.add(new LaserOn2dItem(point1, point2, speed));
+                    items.add(new LaserOn2dOperation(point1, point2, speed));
                     point1 = point2;
                     logger.trace("Line translated: " + line.getLineString());
                     break;
@@ -60,7 +63,7 @@ public final class GcodeTranslator {
 
                     point2 = new Point(line, true);
                     if (!point2.equals(point1)) {
-                        items.add(new LaserOn2dItem(point1, point2, speed));
+                        items.add(new LaserOn2dOperation(point1, point2, speed));
                     }
                     point1 = point2;
                     logger.trace("Line translated: " + line.getLineString());
@@ -73,7 +76,7 @@ public final class GcodeTranslator {
                     }
 
                     point2 = new Point(line, false);
-                    items.add(new LaserOff2DItem(point2));
+                    items.add(new LaserOff2dOperation(point2));
                     point1 = point2;
                     logger.trace("Line translated: " + line.getLineString());
                     break;
@@ -85,7 +88,7 @@ public final class GcodeTranslator {
                     }
 
                     point2 = new Point(line, false);
-                    items.add(new LaserOff2DItem(point2));
+                    items.add(new LaserOff2dOperation(point2));
                     point1 = point2;
                     logger.trace("Line translated: " + line.getLineString());
                     break;
@@ -97,12 +100,12 @@ public final class GcodeTranslator {
                     }
 
                     if (!point1.isLaserOn()) {
-                        items.add(new StartItem());
+                        items.add(new StartOperation(initialDelayTime));
                     }
 
                     point2 = new Point(line, true);
                     if (!point2.equals(point1)) {
-                        items.add(new LaserOn3DItem(point1, point2, speed));
+                        items.add(new LaserOn3dOperation(point1, point2, speed));
                         point1 = point2;
                         logger.trace("Line translated: " + line.getLineString());
                     } else {

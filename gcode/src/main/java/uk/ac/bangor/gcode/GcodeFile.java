@@ -1,5 +1,6 @@
 package uk.ac.bangor.gcode;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -15,7 +16,7 @@ public class GcodeFile {
 
     public GcodeFile(String fileString, List<FileLine> fileLines) {
         this.fileString = fileString;
-        this.fileLines = fileLines;
+        this.fileLines = Collections.unmodifiableList(fileLines);
     }
 
     public String getFileString() {
