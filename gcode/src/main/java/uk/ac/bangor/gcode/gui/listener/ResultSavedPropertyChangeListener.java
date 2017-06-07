@@ -5,7 +5,7 @@ import java.beans.PropertyChangeListener;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import uk.ac.bangor.gcode.gui.GcodeModel;
-import uk.ac.bangor.gcode.gui.MainStatus;
+import uk.ac.bangor.gcode.gui.ResultSavingMessageStatus;
 
 /**
  *
@@ -24,7 +24,7 @@ public class ResultSavedPropertyChangeListener implements PropertyChangeListener
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         GcodeModel model = (GcodeModel) evt.getSource();
-        MainStatus mainStatus = model.getMainStatus();
+        ResultSavingMessageStatus mainStatus = model.getResultSavingMessageStatus();
         saveJButton.setEnabled(mainStatus.canBeProcessed()); 
         errorMessageJLabel.setVisible(mainStatus.isVisible());
         errorMessageJLabel.setText(mainStatus.getMessage());

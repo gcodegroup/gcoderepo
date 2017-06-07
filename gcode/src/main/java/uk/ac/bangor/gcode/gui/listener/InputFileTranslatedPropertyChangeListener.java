@@ -10,7 +10,7 @@ import java.beans.PropertyChangeListener;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import uk.ac.bangor.gcode.gui.GcodeModel;
-import uk.ac.bangor.gcode.gui.InputFileTranslatedStatus;
+import uk.ac.bangor.gcode.gui.InputFileTranslationMessageStatus;
 
 /**
  *
@@ -30,7 +30,7 @@ public class InputFileTranslatedPropertyChangeListener implements PropertyChange
     public void propertyChange(PropertyChangeEvent evt) {
         
         GcodeModel model = (GcodeModel) evt.getSource();
-        InputFileTranslatedStatus inputFileStatus = model.getInputFileStatus();
+        InputFileTranslationMessageStatus inputFileStatus = model.getInputFileTranslationMessageStatus();
         translateJButton.setEnabled(inputFileStatus.canBeProcessed()); 
         translateMessageJLabel.setVisible(inputFileStatus.isVisible());
         translateMessageJLabel.setText(inputFileStatus.getMessage());

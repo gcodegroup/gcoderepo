@@ -110,10 +110,20 @@ public final class GcodeRepositoryManager {
     public synchronized void writeRunningParameters() throws IOException {
 
         try (FileOutputStream fileOutputStream = new FileOutputStream(gcodeTranslatorPropertyFile)) {
+            properties.setProperty(useDefaultConfigKey, "false");
+            properties.setProperty(inputFilePathKey, runningParameters.getInputFilePath());
+            properties.setProperty(outputFilePathKey, runningParameters.getOutputFilePath());
+            properties.setProperty(initialDealyTimeKey, String.valueOf(runningParameters.getInitialDelayTime()));
+            properties.setProperty(movingSpeedKey, String.valueOf(runningParameters.getMovingSpeed()));
             properties.store(fileOutputStream, "All Gcode Translator parameters are saved here.\n\n");
         }
     }
 
+    public synchronized void resetRunningParameters() {
+        runningParameters.setUseDefaultConfig(true);
+        gcodeTranslatorPropertyFile.delete();
+    }
+    
     /**
      * Get a logger for the given class.
      * @param <T> - The class type.
