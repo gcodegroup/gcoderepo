@@ -7,7 +7,7 @@ import javax.swing.JLabel;
 import uk.ac.bangor.gcode.GcodeException;
 import uk.ac.bangor.gcode.LineReader;
 import uk.ac.bangor.gcode.gui.GcodeModel;
-import uk.ac.bangor.gcode.gui.InputFilePathStatus;
+import uk.ac.bangor.gcode.gui.InputFilePathMessageStatus;
 
 /**
  * The InputFilePathPropertyChangeListener class listen to the change of input
@@ -28,7 +28,7 @@ public final class InputFilePathPropertyChangeListener implements PropertyChange
     public void propertyChange(PropertyChangeEvent evt) {
 
         GcodeModel model = (GcodeModel) evt.getSource();
-        InputFilePathStatus inputFilePathStatus = model.getInputFilePathStatus();
+        InputFilePathMessageStatus inputFilePathStatus = model.getInputFilePathMessageStatus();
         
         errorJLabel.setVisible(inputFilePathStatus.isVisible());
         errorJLabel.setText(inputFilePathStatus.getMessage());

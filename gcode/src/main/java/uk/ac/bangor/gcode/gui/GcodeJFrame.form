@@ -20,6 +20,14 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="saveParametersJMenuItemActionPerformed"/>
               </Events>
             </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="resetDefaultParametersJMenuItem">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Reset Default Parameters"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="resetDefaultParametersJMenuItemActionPerformed"/>
+              </Events>
+            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="exitJMenuItem">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Exit"/>
@@ -82,17 +90,18 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
+                      <Component id="inputFilePathMessageJLabel" max="32767" attributes="0"/>
+                      <Component id="jSeparator1" alignment="1" max="32767" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
                           <Component id="outputFileJLabel" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="outputFileJTextField" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="selectOutputFileJButton" min="-2" pref="96" max="-2" attributes="0"/>
                       </Group>
-                      <Component id="inputFileErrorJLabel" max="32767" attributes="0"/>
                       <Group type="102" alignment="1" attributes="0">
                           <Component id="inputFileJLabel" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
@@ -102,26 +111,27 @@
                       </Group>
                       <Component id="inputJScrollPane" alignment="0" max="32767" attributes="0"/>
                       <Component id="outputJScrollPane" alignment="0" max="32767" attributes="0"/>
-                      <Group type="102" attributes="0">
-                          <Component id="initialDelayTimeJLabel" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="initialDelayTimeJSpinner" min="-2" pref="53" max="-2" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="speedJLabel" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="speedJSpinner" min="-2" pref="55" max="-2" attributes="0"/>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="translateJButton" min="-2" pref="103" max="-2" attributes="0"/>
-                          <EmptySpace pref="69" max="32767" attributes="0"/>
-                      </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="saveOutputJButton" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="outputErrorWarningMessageJLabel" max="32767" attributes="0"/>
                       </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="fileTranslatedJLabel" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <Group type="102" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="initialDelayTimeJLabel" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="initialDelayTimeJSpinner" min="-2" pref="53" max="-2" attributes="0"/>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Component id="speedJLabel" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Component id="speedJSpinner" min="-2" pref="55" max="-2" attributes="0"/>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <Component id="translateJButton" min="-2" pref="103" max="-2" attributes="0"/>
+                              </Group>
+                              <Component id="fileTranslatedJLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace min="0" pref="10" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -138,8 +148,8 @@
                       <Component id="inputFileJButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                  <Component id="inputFileErrorJLabel" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="inputFilePathMessageJLabel" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="inputJScrollPane" min="-2" pref="107" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -151,8 +161,10 @@
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="fileTranslatedJLabel" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="outputJScrollPane" pref="295" max="32767" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Component id="jSeparator1" min="-2" pref="10" max="-2" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Component id="outputJScrollPane" pref="216" max="32767" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="outputFileJLabel" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -213,7 +225,7 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Translate"/>
             <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="model.getInputFileStatus().canBeProcessed()" type="code"/>
+              <Connection code="model.getInputFileTranslationMessageStatus().canBeProcessed()" type="code"/>
             </Property>
           </Properties>
           <Events>
@@ -239,7 +251,7 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Save Output"/>
             <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="model.getMainStatus().canBeProcessed()" type="code"/>
+              <Connection code="model.getResultSavingMessageStatus().canBeProcessed()" type="code"/>
             </Property>
           </Properties>
           <Events>
@@ -249,10 +261,10 @@
         <Component class="javax.swing.JLabel" name="outputErrorWarningMessageJLabel">
           <Properties>
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="model.getMainStatus().getColor()" type="code"/>
+              <Connection code="model.getResultSavingMessageStatus().getColor()" type="code"/>
             </Property>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="model.getMainStatus().getMessage()" type="code"/>
+              <Connection code="model.getResultSavingMessageStatus().getMessage()" type="code"/>
             </Property>
             <Property name="focusable" type="boolean" value="false"/>
           </Properties>
@@ -297,24 +309,25 @@
             <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="speedJSpinnerStateChanged"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JLabel" name="inputFileErrorJLabel">
-          <Properties>
-            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="model.getInputFilePathStatus().getColor()" type="code"/>
-            </Property>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="model.getInputFilePathStatus().getMessage()" type="code"/>
-            </Property>
-            <Property name="focusable" type="boolean" value="false"/>
-          </Properties>
-        </Component>
         <Component class="javax.swing.JLabel" name="fileTranslatedJLabel">
           <Properties>
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="model.getInputFileStatus().getColor()" type="code"/>
+              <Connection code="model.getInputFileTranslationMessageStatus().getColor()" type="code"/>
             </Property>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="model.getInputFileStatus().getMessage()" type="code"/>
+              <Connection code="model.getInputFileTranslationMessageStatus().getMessage()" type="code"/>
+            </Property>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JSeparator" name="jSeparator1">
+        </Component>
+        <Component class="javax.swing.JLabel" name="inputFilePathMessageJLabel">
+          <Properties>
+            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="model.getInputFilePathMessageStatus().getColor()" type="code"/>
+            </Property>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="model.getInputFilePathMessageStatus().getMessage()" type="code"/>
             </Property>
           </Properties>
         </Component>

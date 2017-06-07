@@ -4,6 +4,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
 import uk.ac.bangor.gcode.GcodeFile;
+import uk.ac.bangor.gcode.GcodeRepositoryManager;
 import uk.ac.bangor.gcode.RunningParameters;
 
 public class GcodeModel {
@@ -26,9 +27,9 @@ public class GcodeModel {
     private String outputFilePath;
     private int movingSpeed = runningParameters.getMovingSpeed();
     private int initialDelayTime = runningParameters.getInitialDelayTime();
-    private InputFilePathStatus inputFilePathStatus = InputFilePathStatus.EMPTY_INPUT_FILE_PATH;
-    private InputFileTranslatedStatus inputFileStatus = InputFileTranslatedStatus.NO_INPUT_FILE;
-    private MainStatus mainStatus = MainStatus.NO_TRANSLATED_RESULT;
+    private InputFilePathMessageStatus inputFilePathMessageStatus = InputFilePathMessageStatus.EMPTY_INPUT_FILE_PATH;
+    private InputFileTranslationMessageStatus inputFileTranslationMessageStatus = InputFileTranslationMessageStatus.NO_INPUT_FILE;
+    private ResultSavingMessageStatus resultSavingMessageStatus = ResultSavingMessageStatus.NO_TRANSLATED_RESULT;
 
     private final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
@@ -40,10 +41,10 @@ public class GcodeModel {
         
         String oldValue = this.inputFilePath;
         this.inputFilePath = inputFilePath;
-        inputFilePathStatus = (inputFilePath == null || inputFilePath.trim().isEmpty()) ? 
-                InputFilePathStatus.EMPTY_INPUT_FILE_PATH : (new File(inputFilePath).isFile() ? 
-                (inputFilePath.toLowerCase().endsWith(".gcode") ? InputFilePathStatus.VALID_INPUT_FILE_PATH : InputFilePathStatus.POSSIBLE_WRONG_TYPE_FILE) 
-               : InputFilePathStatus.INVALID_INPUT_FILE_PATH);
+        inputFilePathMessageStatus = (inputFilePath == null || inputFilePath.trim().isEmpty()) ? 
+                InputFilePathMessageStatus.EMPTY_INPUT_FILE_PATH : (new File(inputFilePath).isFile() ? 
+                (inputFilePath.toLowerCase().endsWith(".gcode") ? InputFilePathMessageStatus.VALID_INPUT_FILE_PATH : InputFilePathMessageStatus.POSSIBLE_WRONG_TYPE_FILE) 
+               : InputFilePathMessageStatus.FILE_DOES_NOT_EXIST);
         propertyChangeSupport.firePropertyChange(INPUT_FILE_PATH_PROPERTY, oldValue, inputFilePath);
     }
 
@@ -105,17 +106,17 @@ public class GcodeModel {
 
     public synchronized void setResultSaved(boolean resultSaved) {
         
-        mainStatus = createMainMessageStatus(resultSaved);
+        resultSavingMessageStatus = createMainMessageStatus(resultSaved);
         propertyChangeSupport.firePropertyChange(RESULT_SAVED_STATUS_PROPERTY, true, false);        
     }
 
 
-    public synchronized InputFilePathStatus getInputFilePathStatus() {
-        return inputFilePathStatus;
+    public synchronized InputFilePathMessageStatus getInputFilePathMessageStatus() {
+        return inputFilePathMessageStatus;
     }
 
-    public synchronized MainStatus getMainStatus() {
-        return mainStatus;
+    public synchronized ResultSavingMessageStatus getResultSavingMessageStatus() {
+        return resultSavingMessageStatus;
     }
 
     public synchronized String getDefaultInputFilePath() {
@@ -130,43 +131,47 @@ public class GcodeModel {
     
     public synchronized void setInputFileTranslated(boolean translated) {
         
-        InputFileTranslatedStatus oldValue = inputFileStatus;
+        InputFileTranslationMessageStatus oldValue = inputFileTranslationMessageStatus;
         
         if(gcodeFile == null || gcodeFile.getFileString() == null || gcodeFile.getFileString().trim().isEmpty()) {
-            inputFileStatus = InputFileTranslatedStatus.NO_INPUT_FILE;
+            inputFileTranslationMessageStatus = InputFileTranslationMessageStatus.NO_INPUT_FILE;
         } else {
             if(translated) {
-                inputFileStatus = InputFileTranslatedStatus.INPUT_FILE_TRANSLATED;
+                inputFileTranslationMessageStatus = InputFileTranslationMessageStatus.INPUT_FILE_TRANSLATED;
             } else {
-                inputFileStatus = InputFileTranslatedStatus.INPUT_FILE_NOT_TRANSLATED;
+                inputFileTranslationMessageStatus = InputFileTranslationMessageStatus.INPUT_FILE_NOT_TRANSLATED;
             }
         }
         
-        propertyChangeSupport.firePropertyChange(INPUT_FILE_TRANSLATED_STATUS_PROPERTY, oldValue, inputFileStatus);           
+        propertyChangeSupport.firePropertyChange(INPUT_FILE_TRANSLATED_STATUS_PROPERTY, oldValue, inputFileTranslationMessageStatus);           
     }
 
-    public synchronized InputFileTranslatedStatus getInputFileStatus() {
-        return inputFileStatus;
+    public synchronized InputFileTranslationMessageStatus getInputFileTranslationMessageStatus() {
+        return inputFileTranslationMessageStatus;
     }
     
-    private MainStatus createMainMessageStatus(boolean resultSaved) {
+    private ResultSavingMessageStatus createMainMessageStatus(boolean resultSaved) {
 
         if(translatedText == null || translatedText.trim().isEmpty()) {
-            return MainStatus.NO_TRANSLATED_RESULT;
+            return ResultSavingMessageStatus.NO_TRANSLATED_RESULT;
         }
         
         if(outputFilePath == null || new File(outputFilePath).isDirectory()) {
-            return MainStatus.INVALID_OUTPUT_FILE_PATH;
+            return ResultSavingMessageStatus.INVALID_OUTPUT_FILE_PATH;
 
         }
         
-        return resultSaved ? MainStatus.RESULT_SAVED : (new File(outputFilePath).isFile() ? MainStatus.OUTPUT_FILE_EXISTS : MainStatus.RESULT_NOT_SAVED);
+        return resultSaved ? ResultSavingMessageStatus.RESULT_SAVED : (new File(outputFilePath).isFile() ? ResultSavingMessageStatus.OUTPUT_FILE_EXISTS : ResultSavingMessageStatus.RESULT_NOT_SAVED);
     }
     
     public synchronized boolean isParametersOkToBeSaved() {
         
-        return inputFilePathStatus.canBeProcessed() && mainStatus.canBeProcessed();
+        return inputFilePathMessageStatus.canBeProcessed() && outputFilePath != null && !outputFilePath.trim().isEmpty();
     }
+    
+    public synchronized void resetRunningParameters() {
+        GcodeRepositoryManager.getInstance().resetRunningParameters();
+    }    
     
     public synchronized void addPropertyChangeListener(PropertyChangeListener listener) {
         propertyChangeSupport.addPropertyChangeListener(listener);
