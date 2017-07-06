@@ -15,7 +15,7 @@ public final class StartOperation extends AbstractGcodeOperation {
      */
     public StartOperation(int initialDelayTime) {
 
-        super("CT0 3 7 0\n"
+        super("CTO 3 7 0\n"
                 + "DEL " + initialDelayTime + "\n"
                 + "CTO 3 7 1");
     }
