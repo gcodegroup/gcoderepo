@@ -24,7 +24,9 @@ public final class LaserOff3dOperation extends AbstractGcodeOperation {
         return "CTO 1 7 0\n"
                 + "DEL " + initialDelayTime + "\n"
                 + "CTO 1 7 1\n"
-                + "MOV A " + x + " B " + y + " C " + z;
+                + "VCO A 0 B 0 C 0\n"
+                + "MOV A " + x + " B " + y + " C " + z + "\n"
+                + "VCO A 1 B 1 C 1";
     }
 
     private static String getString(double value) {
