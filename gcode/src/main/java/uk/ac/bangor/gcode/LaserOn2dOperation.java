@@ -20,8 +20,8 @@ public final class LaserOn2dOperation extends AbstractGcodeOperation {
         String x = getString(point1.getX());
         String y = getString(point1.getY());
 
-        double xDistance = point2.getX() - point1.getX();
-        double yDistance = point2.getY() - point1.getY();
+        double xDistance = Math.abs(point2.getX() - point1.getX());
+        double yDistance = Math.abs(point2.getY() - point1.getY());
 
         String delayTime = getString(Math.sqrt(xDistance * xDistance + yDistance * yDistance) / speed);
         String vx = getString(speed * xDistance / Math.sqrt(xDistance * xDistance + yDistance * yDistance));
