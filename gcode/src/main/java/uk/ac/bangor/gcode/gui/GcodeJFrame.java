@@ -44,6 +44,7 @@ public final class GcodeJFrame extends JFrame {
      */
     public GcodeJFrame() {
 
+        setTitle("Gcode Translator");
         initComponents();
         inputJFileChooser = new JFileChooser(new File(model.getDefaultInputFilePath()));
         inputJFileChooser.setDialogTitle("Select Input File");
@@ -117,7 +118,6 @@ public final class GcodeJFrame extends JFrame {
         saveParametersJMenuItem = new javax.swing.JMenuItem();
         resetDefaultParametersJMenuItem = new javax.swing.JMenuItem();
         exitJMenuItem = new javax.swing.JMenuItem();
-        editJMenu = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -304,9 +304,6 @@ public final class GcodeJFrame extends JFrame {
 
         mainJMenuBar.add(fileJMenu);
 
-        editJMenu.setText("Edit");
-        mainJMenuBar.add(editJMenu);
-
         setJMenuBar(mainJMenuBar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -416,7 +413,6 @@ public final class GcodeJFrame extends JFrame {
     }//GEN-LAST:event_resetDefaultParametersJMenuItemActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenu editJMenu;
     private javax.swing.JMenuItem exitJMenuItem;
     private javax.swing.JMenu fileJMenu;
     private javax.swing.JLabel fileTranslatedJLabel;

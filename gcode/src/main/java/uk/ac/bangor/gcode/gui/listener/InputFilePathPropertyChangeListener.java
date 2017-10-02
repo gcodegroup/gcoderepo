@@ -31,6 +31,7 @@ public final class InputFilePathPropertyChangeListener implements PropertyChange
         InputFilePathMessageStatus inputFilePathStatus = model.getInputFilePathMessageStatus();
         
         errorJLabel.setVisible(inputFilePathStatus.isVisible());
+        errorJLabel.setForeground(inputFilePathStatus.getColor());
         errorJLabel.setText(inputFilePathStatus.getMessage());
         
         if (inputFilePathStatus.canBeProcessed()) {
