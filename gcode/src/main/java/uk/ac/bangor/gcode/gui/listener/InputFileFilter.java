@@ -16,11 +16,12 @@ public class InputFileFilter extends FileFilter {
             return true;
         }
         
-        return file.getName().toLowerCase().endsWith(".gcode");
+        String name = file.getName().toLowerCase();
+        return name.endsWith(".gcode") || name.endsWith(".mmg");
     }
     
     @Override
     public String getDescription() {
-        return "Show only folders and gcode files";
+        return "Show only folders, mmg and gcode files";
     }    
 }

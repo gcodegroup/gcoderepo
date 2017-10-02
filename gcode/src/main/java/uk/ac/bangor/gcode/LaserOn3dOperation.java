@@ -25,19 +25,22 @@ public final class LaserOn3dOperation extends AbstractGcodeOperation {
 
     private static String getString(Point point1, Point point2, double speed) {
 
-        String x = getString(point1.getX());
-        String y = getString(point1.getY());
-
+        String x = getString(point2.getX());
+        String y = getString(point2.getY());
         String z = getString(point2.getZ());
 
         double xDistance = Math.abs(point2.getX() - point1.getX());
         double yDistance = Math.abs(point2.getY() - point1.getY());
+        double zDistance = Math.abs(point2.getZ() - point1.getZ());        
+        double sqrt = Math.sqrt(xDistance * xDistance + yDistance * yDistance + zDistance * zDistance);
 
-        String delayTime = getString(Math.sqrt(xDistance * xDistance + yDistance * yDistance) / speed);
-        String vx = getString(speed * xDistance / Math.sqrt(xDistance * xDistance + yDistance * yDistance));
-        String vy = getString(speed * yDistance / Math.sqrt(xDistance * xDistance + yDistance * yDistance));
-
-        return "VEL A " + vx + " B " + vy + "\n"
+        String delayTime = getString(sqrt / speed);
+        
+        String vx = getString(speed * xDistance / sqrt);
+        String vy = getString(speed * yDistance / sqrt);
+        String vz = getString(speed * zDistance / sqrt);
+        
+        return "VEL A " + vx + " B " + vy + " C " + vz +"\n"
                 + "MOV A " + x + " B " + y + " C " + z + "\n"
                 + "DEL " + delayTime;
 

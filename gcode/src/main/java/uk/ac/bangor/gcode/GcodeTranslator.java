@@ -21,11 +21,11 @@ public final class GcodeTranslator {
     public String translate(List<FileLine> lines) {
 
         Logger logger = GcodeRepositoryManager.getInstance().getLogger(getClass());
-        
+
         RunningParameters runningParameters = RunningParameters.getInstance();
         int speed = runningParameters.getMovingSpeed();
         int initialDelayTime = runningParameters.getInitialDelayTime();
-        
+
         List<GcodeOperation> items = new ArrayList<>();
 
         Point point1 = null;
@@ -35,6 +35,7 @@ public final class GcodeTranslator {
 
             switch (line.getLineStatus()) {
 
+                case G0_XYZ_LINE:
                 case G0_FXYZ_LINE:
                     point1 = new Point(line, false);
                     items.add(new LaserOff3dOperation(point1, initialDelayTime));
@@ -94,6 +95,7 @@ public final class GcodeTranslator {
                     break;
 
                 case G1_FXYZ_LINE:
+                case G1_XYZ_LINE:
 
                     if (point1 == null) {
                         throw new GcodeException("Invalid point1..\n" + line.getLineString());
@@ -110,9 +112,9 @@ public final class GcodeTranslator {
                         logger.trace("Line translated: " + line.getLineString());
                     } else {
                         logger.debug("Line NOT translated: " + line.getLineString());
-                    }             
+                    }
                     break;
-                    
+
                 default:
                     logger.debug("Line NOT translated: " + line.getLineString());
             }

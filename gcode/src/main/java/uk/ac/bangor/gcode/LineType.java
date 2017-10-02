@@ -62,7 +62,21 @@ public enum LineType {
      * For example: G0 F9000 X42.035 Y43.814
      * 
      */      
-    G1_XY_LINE,     
+    G1_XY_LINE,  
+    
+    /**
+     * The line with G00, X, Y and Z. This line is the same function as G0_XYZ.
+     */
+    G0_XYZ_LINE,
+    
+    
+    /**
+     * The line with G01, X, Y and Z. This line is the same function as G1_XYZ.
+     */
+    G1_XYZ_LINE,
+   
+    
+    
     
     /**
      * The line which is not used. This line can be omitted during the translation.
