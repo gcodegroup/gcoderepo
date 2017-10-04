@@ -61,12 +61,12 @@ public final class FileLine {
             return;
         }        
 
-        if (lineString.contains("G1") && !lineString.contains("E") && !lineString.contains("T") && lineString.contains("X") && lineString.contains("Y") && !lineString.contains("Z")) {
+        if (lineString.contains("G1") && !lineString.contains("E") && !lineString.contains("F") && lineString.contains("X") && lineString.contains("Y") && !lineString.contains("Z")) {
             lineStatus = LineType.G1_XY_LINE;
             return;
         }          
  
-        if (lineString.contains("G1") && !lineString.contains("E") && !lineString.contains("T") && lineString.contains("X") && lineString.contains("Y") && lineString.contains("Z")) {
+        if (lineString.contains("G1") && !lineString.contains("E") && !lineString.contains("F") && lineString.contains("X") && lineString.contains("Y") && lineString.contains("Z")) {
             lineStatus = LineType.G1_XYZ_LINE;
             return;
         }        

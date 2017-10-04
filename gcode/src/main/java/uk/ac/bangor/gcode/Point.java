@@ -43,7 +43,6 @@ public final class Point {
 
         this.xValue = Double.parseDouble(xString);
         this.yValue = Double.parseDouble(yString);
-
         this.zValue = Double.parseDouble(zString);
     }
 
