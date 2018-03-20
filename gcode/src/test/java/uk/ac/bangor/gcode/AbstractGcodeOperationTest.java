@@ -4,16 +4,16 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
+ * Test of class AbstractGcodeOperation
  *
  * @author zc
  */
-public class AbstractGcodeOperationTest {
-    
+public final class AbstractGcodeOperationTest {
+
     private final AbstractGcodeOperation instance1 = new AbstractGcodeOperationImpl("mystring");
     private final AbstractGcodeOperation instance2 = new AbstractGcodeOperationImpl("mystring");
-    private final AbstractGcodeOperation instance3 = new AbstractGcodeOperationImpl("newstring");    
-    
-    
+    private final AbstractGcodeOperation instance3 = new AbstractGcodeOperationImpl("newstring");
+
     @Test
     public void testGetString() {
         assertEquals("mystring", instance1.getString());
@@ -21,7 +21,7 @@ public class AbstractGcodeOperationTest {
 
     @Test
     public void testHashCode() {
-        
+
         assertEquals(instance2.hashCode(), instance1.hashCode());
         assertNotEquals(instance3.hashCode(), instance1.hashCode());
     }
@@ -33,7 +33,7 @@ public class AbstractGcodeOperationTest {
         assertTrue(instance1.equals(instance2));
         assertFalse(instance1.equals(instance3));
         assertFalse(instance1.equals(new Object()));
-        assertFalse(instance1.equals(null));        
+        assertFalse(instance1.equals(null));
     }
 
     private static final class AbstractGcodeOperationImpl extends AbstractGcodeOperation {
@@ -42,5 +42,5 @@ public class AbstractGcodeOperationTest {
             super(string);
         }
     }
-    
+
 }
